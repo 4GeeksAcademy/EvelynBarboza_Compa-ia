@@ -70,15 +70,21 @@
 
     <header class="border-b border-primary/10 bg-white/80 backdrop-blur" role="banner">
       <div class="mx-auto flex w-full max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
-        <p class="text-lg font-bold text-primary">TrackFlow Tech</p>
+        <a
+          href="./index.html"
+          class="text-2xl font-bold tracking-tight transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_8px_20px_rgba(6,182,212,0.35)] sm:text-3xl"
+          aria-label="Ir a la página principal"
+        >
+          <span class="text-primary">Track</span><span class="text-secondary">Flow</span><span class="ml-1 align-middle text-accent">.</span>
+        </a>
         <div class="flex items-center gap-2">
           <div class="inline-flex items-center rounded-xl border border-primary/20 bg-white p-1">
-            <button type="button" data-lang-switch="es" class="rounded-lg px-2 py-1 text-xs font-semibold text-primary">ES</button>
-            <button type="button" data-lang-switch="en" class="rounded-lg px-2 py-1 text-xs font-semibold text-ink/70">EN</button>
+            <button type="button" data-lang-switch="es" class="rounded-lg px-2 py-1 text-xs font-semibold text-primary transition-all duration-200 hover:scale-105 hover:bg-secondary/10">ES</button>
+            <button type="button" data-lang-switch="en" class="rounded-lg px-2 py-1 text-xs font-semibold text-ink/70 transition-all duration-200 hover:scale-105 hover:bg-secondary/10">EN</button>
           </div>
           <a
             href="./index.html"
-            class="rounded-xl border border-primary/20 px-4 py-2 text-sm font-semibold transition hover:border-accent hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            class="rounded-xl border border-primary/20 px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 hover:border-secondary/50 hover:bg-secondary/10 hover:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             data-i18n="back"
             data-i18n-aria-label="backAria"
             aria-label="Volver a la página principal"
@@ -180,8 +186,8 @@
           </p>
 
           <div class="grid gap-8 lg:grid-cols-2">
-            <div class="rounded-2xl border border-primary/10 bg-page p-6 shadow-md">
-              <h2 class="inline-flex items-center gap-2 text-base font-semibold text-primary">
+            <fieldset class="rounded-2xl border border-primary/10 bg-page p-6 shadow-md transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,58,138,0.26)]">
+              <legend class="inline-flex items-center gap-2 px-1 text-base font-semibold text-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -199,7 +205,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h6m-6 4.5h6m-6 4.5h3" />
                 </svg>
                 <span data-i18n="accessData">Datos de acceso</span>
-              </h2>
+              </legend>
               <div class="mt-4 space-y-5">
                 <div>
                   <label for="fullName" class="block text-sm font-semibold"
@@ -285,10 +291,10 @@
                   <p id="confirmPassword-error" class="mt-2 text-sm text-red-700" role="alert" aria-live="polite"></p>
                 </div>
               </div>
-            </div>
+            </fieldset>
 
-            <div class="rounded-2xl border border-primary/10 bg-page p-6 shadow-md">
-              <h2 class="inline-flex items-center gap-2 text-base font-semibold text-primary">
+            <fieldset class="rounded-2xl border border-primary/10 bg-page p-6 shadow-md transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,58,138,0.26)]">
+              <legend class="inline-flex items-center gap-2 px-1 text-base font-semibold text-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -306,7 +312,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 7.5 8.25 5.25 8.25-5.25" />
                 </svg>
                 <span data-i18n="optionalData">Datos opcionales</span>
-              </h2>
+              </legend>
               <div class="mt-4 space-y-5">
                 <div>
                         <label for="phone" class="block text-sm font-semibold" data-i18n="phoneLabel">Teléfono</label>
@@ -354,13 +360,13 @@
                   ></textarea>
                 </div>
               </div>
-            </div>
+            </fieldset>
           </div>
 
           <div class="flex flex-col gap-3 pt-1 sm:flex-row">
             <button
               type="submit"
-              class="w-full rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto"
+              class="w-full rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto"
               data-i18n="submit"
               data-i18n-aria-label="submitAria"
               aria-label="Enviar formulario de registro"
@@ -370,7 +376,7 @@
             <button
               type="button"
               id="clear-form"
-              class="w-full rounded-2xl border border-primary/30 bg-white px-5 py-3 text-sm font-semibold text-primary transition hover:border-accent hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto"
+              class="w-full rounded-2xl border border-primary/30 bg-white px-5 py-3 text-sm font-semibold text-primary transition-all duration-200 hover:scale-105 hover:border-accent hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto"
               data-i18n="clear"
               data-i18n-aria-label="clearAria"
               aria-label="Limpiar todos los campos del formulario"
