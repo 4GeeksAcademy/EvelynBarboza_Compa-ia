@@ -171,12 +171,19 @@
       </nav>
     </header>
 
-    <main class="mx-auto w-full max-w-6xl px-4 sm:px-6" aria-label="Contenido principal">
-      <section id="inicio" class="relative flex h-[100svh] items-center overflow-hidden rounded-2xl border border-primary/40 bg-primary p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="hero-title">
+    <main class="w-full" aria-label="Contenido principal">
+      <section id="inicio" class="relative flex h-[100svh] items-center overflow-hidden border border-primary/40 bg-primary p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="hero-title">
+        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div
+            class="h-full w-full bg-cover bg-center opacity-30 blur-[2px]"
+            style="background-image: url('https://thumbs.dreamstime.com/b/imagen-del-concepto-de-la-log%C3%ADstica-del-env%C3%ADo-del-transporte-46109326.jpg');"
+          ></div>
+          <div class="absolute inset-0 bg-primary/60"></div>
+        </div>
         <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/20 blur-3xl"></div>
 
-        <div class="relative max-w-3xl">
+        <div class="relative z-10 max-w-3xl">
           <p class="inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white" data-i18n="heroBadge">
             Logística de última milla y almacenes
           </p>
@@ -208,7 +215,7 @@
         </div>
       </section>
 
-      <section id="como-funciona" class="flex h-[100svh] items-center rounded-2xl border border-primary/10 bg-white p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="como-funciona-title">
+      <section id="como-funciona" class="flex h-[100svh] items-center border border-primary/10 bg-white p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="como-funciona-title">
         <div class="w-full">
           <div class="mb-5">
           <h2 id="como-funciona-title" class="text-2xl font-bold text-primary sm:text-3xl" data-i18n="howTitle">Cómo funciona</h2>
@@ -247,7 +254,7 @@
         </div>
       </section>
 
-      <section id="experiencias" class="flex h-[100svh] items-center rounded-2xl border border-primary/40 bg-primary p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="experiencias-title">
+      <section id="experiencias" class="flex h-[100svh] items-center border border-primary/40 bg-primary p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="experiencias-title">
         <div class="w-full">
           <div class="mb-5">
           <h2 id="experiencias-title" class="text-2xl font-bold text-white sm:text-3xl" data-i18n="expTitle">Experiencias</h2>
@@ -279,7 +286,7 @@
         </div>
       </section>
 
-      <section id="contacto" class="flex h-[100svh] items-center rounded-2xl border border-primary/10 bg-white p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="contacto-title">
+      <section id="contacto" class="flex h-[100svh] items-center border border-primary/10 bg-white p-6 shadow-md sm:p-8 lg:p-10" aria-labelledby="contacto-title">
         <div class="w-full rounded-2xl border border-primary/10 bg-white p-6 shadow-md sm:p-8">
           <h2 id="contacto-title" class="text-2xl font-bold text-primary" data-i18n="contactTitle">Contacto</h2>
           <p class="mt-3 max-w-3xl text-sm leading-relaxed text-ink/80 sm:text-base" data-i18n="contactDescription">
