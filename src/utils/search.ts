@@ -18,7 +18,7 @@ export function SearchBinarySku(items: InventaryItem[], sku: string): InventaryI
             if (items[middle].sku === sku){
                 return items[middle]
             }
-
+git 
             if (items[middle].sku < sku ){
                 left = middle +1;
             } else {
