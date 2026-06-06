@@ -6,6 +6,8 @@ const PRIORITY_MULTIPLIERS = {
   "Same-day": 1.6
 } as const;
 
+
+////////////////// CALCULAR COSTO DE ENVÍO //////////////////
 export function calculateShippingCost(
   shipment: Shipment,
   product: Product,
@@ -39,6 +41,7 @@ export function calculateShippingCost(
   return Number(total.toFixed(2));
 }
 
+////////////////// CALCULAR PUNTAJE DE TRANSPORTISTA //////////////////
 export function scoreCarrierForShipment(
   carrier: Carrier,
   shipment: Shipment,
@@ -87,6 +90,7 @@ export function scoreCarrierForShipment(
   return Number(score.toFixed(2));
 }
 
+////////////////// SELECCIONAR MEJOR TRANSPORTISTA //////////////////
 export function selectBestCarrier(
   carriers: Carrier[],
   shipment: Shipment,

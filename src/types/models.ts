@@ -104,3 +104,9 @@ export interface InventoryMovement {
 }
 
 type MovementType = "Inbound" | "Outbound" | "Transfer" | "Adjustment";
+
+///RESULTADO VALIDACIONES///////////////////////
+export interface ValidationResult {
+  valid: boolean;
+  errors: string[];
+}
