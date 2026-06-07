@@ -131,3 +131,63 @@ export function selectBestCarrier(
       : best
   );
 }
+
+////////////////// CONTAR PRODUCTOS POR CATEGORÍA //////////////////
+
+export function countProductsByCategory(
+  products: Product[]
+): Record<string, number> {
+  return products.reduce((counts, product) => {
+    counts[product.category] =
+      (counts[product.category] ?? 0) + 1;
+
+    return counts;
+  }, {} as Record<string, number>);
+}
+
+////////////////// CALCULAR VALOR TOTAL DEL INVENTARIO //////////////////
+
+export function calculateTotalInventoryValue(
+  products: Product[]
+): number {
+  return products.reduce(
+    (total, product) =>
+      total +
+      product.stockQuantity * product.unitCostUSD,
+    0
+  );
+}
+
+////////////////// CALCULAR STOCK TOTAL POR ALMACÉN //////////////////
+
+export function calculateStockByWarehouse(
+  products: Product[]
+): Record<string, number> {
+  return products.reduce((stock, product) => {
+    stock[product.warehouse] =
+      (stock[product.warehouse] ?? 0) +
+      product.stockQuantity;
+
+    return stock;
+  }, {} as Record<string, number>);
+}
+
+////////////////// CALCULAR DISTANCIA PROMEDIO DE ENVÍOS //////////////////
+
+export function calculateAverageShipmentDistance(
+  shipments: Shipment[]
+): number {
+  if (shipments.length === 0) {
+    return 0;
+  }
+
+  const totalDistance = shipments.reduce(
+    (sum, shipment) =>
+      sum + shipment.destination.distanceKm,
+    0
+  );
+
+  return Number(
+    (totalDistance / shipments.length).toFixed(2)
+  );
+}

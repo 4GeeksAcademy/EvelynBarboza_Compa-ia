@@ -6,8 +6,8 @@ export function filterProductsByWarehouse(products: Product[], warehouse: Wareho
 }
 
 ///funcion buscar por categoria 
-export function SearchForCategory( products: Product[], category: string):Product[] {
-    return products.filter(products => products.category === category);
+export function searchForCategory( product: Product[], category: string):Product[] {
+    return product.filter(product => product.category === category);
 }
 
 //Retorna productos donde stockQuantity <= minStockThreshold
