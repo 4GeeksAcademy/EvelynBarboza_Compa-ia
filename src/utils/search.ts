@@ -1,29 +1,37 @@
-import { InventaryItem } from "../types/models";
+import { Product, Shipment } from "../types/models";
 
-//Buscar Lineal 
-export function SearchLinealSku(items: InventaryItem[], sku: string): InventaryItem | undefined {
-    return items.find(items => items.sku === sku);
+//BUSQUEDA LINEAL POR SKU PRODUCTO
+export function findProductBySKU(products: Product[], sku: string): Product | null {
+    return products.find(products => products.sku === sku)?? null;
+}
+///BUSQUEDA LINEAL POR ENVÍO
+export function findShipmentById(shipments: Shipment[], id: string): Shipment | null {
+    return shipments.find(shipments => shipments.id === id ) ?? null;
 }
 
-//Busqueda Binaria
-export function SearchBinarySku(items: InventaryItem[], sku: string): InventaryItem | number {
-    
+//BUSQUEDA BINARIA DEL INDICE DEL PRODUCTO CON PESO OBJETIVO
+export function binarySearchProductByWeight(
+  sortedProducts: Product[],
+  targetWeight: number
+): number {
+
     let left = 0;
-    let rigth = items.length -1;
+    let rigth = sortedProducts.length - 1;
 
-        while(left<= rigth){
+    while (left <= rigth) {
 
-            let middle =(Math.floor(rigth +left)/2);
+        const middle = Math.floor((left + rigth) / 2);
 
-            if (items[middle].sku === sku){
-                return items[middle]
-            }
-
-            if (items[middle].sku < sku ){
-                left = middle +1;
-            } else {
-                rigth = middle -1;
-            }
+        if (sortedProducts[middle].weightKg === targetWeight) {
+            return middle;
         }
-        return -1
+
+        if (sortedProducts[middle].weightKg < targetWeight) {
+            left = middle + 1;
+        } else {
+            rigth = middle - 1;
+        }
+    }
+
+    return -1;
 }
