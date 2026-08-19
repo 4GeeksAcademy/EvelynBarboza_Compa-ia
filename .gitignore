@@ -1,5 +1,6 @@
-** Dependencias
 node_modules/
-
-**Variables de Entorno
 .env
+.venv/
+__pycache__/
+*.py[cod]
+results.csv
