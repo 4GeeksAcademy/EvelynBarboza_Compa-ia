@@ -14,6 +14,9 @@ from packages.incidents_analysis import (
     analyze_csv_text,
     summary_to_csv,
 )
+from services.api.routes.suppliers import (
+    router as suppliers_router,
+)
 
 
 app = FastAPI(
@@ -21,6 +24,10 @@ app = FastAPI(
         "Trackflow Incidents API"
     ),
     version="1.0.0",
+)
+
+app.include_router(
+    suppliers_router
 )
 
 
