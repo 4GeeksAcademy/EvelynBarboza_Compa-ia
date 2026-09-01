@@ -20,6 +20,17 @@ const nextConfig: NextConfig = {
           ),
       },
 
+      {
+        source:
+          "/auth-backend/:path*",
+
+        destination:
+          (
+            "http://127.0.0.1:"
+            + "8001/:path*"
+          ),
+      },
+
     ];
 
   },

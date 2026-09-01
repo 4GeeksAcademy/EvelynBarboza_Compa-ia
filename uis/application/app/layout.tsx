@@ -5,6 +5,9 @@ import type {
 
 import Link from "next/link";
 
+import AuthGuard from "@/components/auth-guard";
+import AuthNav from "@/components/auth-nav";
+
 import "./globals.css";
 
 
@@ -26,15 +29,13 @@ export default function RootLayout({
               TRACKFLOW
             </Link>
 
-            <nav>
-              <Link href="/suppliers" className="navLink">
-                Proveedores
-              </Link>
-            </nav>
+            <AuthNav />
           </div>
         </header>
 
-        {children}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
       </body>
     </html>
   );

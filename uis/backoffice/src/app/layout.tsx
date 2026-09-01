@@ -5,6 +5,9 @@ import type {
 
 import Link from "next/link";
 
+import AuthGuard from "@/components/auth-guard";
+import AuthNav from "@/components/auth-nav";
+
 import "./globals.css";
 
 
@@ -51,24 +54,15 @@ export default function RootLayout({
             </Link>
 
 
-            <div className="navLinks">
-
-              <Link href="/">
-                Inicio
-              </Link>
-
-              <Link href="/incidents">
-                Incidencias
-              </Link>
-
-            </div>
-
+            <AuthNav />
           </div>
 
         </nav>
 
 
-        {children}
+        <AuthGuard>
+          {children}
+        </AuthGuard>
 
       </body>
 

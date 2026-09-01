@@ -53,6 +53,44 @@ textarea {
   opacity: 1;
 }
 
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navButton {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.authPage {
+  width: min(520px, 94%);
+}
+
+.authPage .field {
+  margin-top: 12px;
+}
+
+.authFooter {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.authLink {
+  color: #203447;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.fieldError {
+  color: #7b1d1d;
+  font-size: 13px;
+}
+
 .page {
   width: min(1240px, 94%);
   margin: 28px auto 56px;
