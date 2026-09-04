@@ -87,6 +87,12 @@ export default function LoginPage() {
             </p>
           ) : null}
 
+          <p className="authFooter">
+            <Link href="/forgot-password" className="authLink">
+              Olvidaste tu contrasena?
+            </Link>
+          </p>
+
           <div className="actions">
             <button
               type="submit"
