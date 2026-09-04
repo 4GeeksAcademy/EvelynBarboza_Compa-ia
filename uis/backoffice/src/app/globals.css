@@ -445,6 +445,163 @@ button:disabled {
 }
 
 
+.navLogout {
+  background:
+    transparent;
+
+  border:
+    0;
+
+  color:
+    inherit;
+
+  padding:
+    0;
+
+  font-weight:
+    400;
+
+  opacity:
+    0.75;
+}
+
+
+.navLogout:hover {
+  opacity:
+    1;
+}
+
+
+.authPage {
+  width:
+    min(
+      460px,
+      92%
+    );
+
+  margin:
+    48px auto;
+}
+
+
+.authTitle {
+  margin:
+    0 0 8px;
+
+  font-size:
+    30px;
+}
+
+
+.authSubtitle {
+  color:
+    #656d76;
+
+  margin:
+    0 0 20px;
+}
+
+
+.authField {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    6px;
+
+  margin-bottom:
+    14px;
+}
+
+
+.authField label {
+  font-weight:
+    700;
+
+  font-size:
+    14px;
+}
+
+
+.authField input {
+  border:
+    1px solid #d3d8dd;
+
+  border-radius:
+    8px;
+
+  padding:
+    10px;
+}
+
+
+.authFieldError {
+  color:
+    #8c2020;
+
+  font-size:
+    13px;
+}
+
+
+.authError,
+.authSuccess {
+  border-radius:
+    8px;
+
+  padding:
+    10px 12px;
+
+  margin:
+    12px 0;
+
+  font-size:
+    14px;
+}
+
+
+.authError {
+  background:
+    #fdecec;
+
+  color:
+    #8c2020;
+}
+
+
+.authSuccess {
+  background:
+    #ecf8f0;
+
+  color:
+    #1f5d2f;
+}
+
+
+.authFooter {
+  margin-top:
+    18px;
+
+  font-size:
+    14px;
+
+  color:
+    #656d76;
+}
+
+
+.authLink {
+  font-weight:
+    700;
+
+  text-decoration:
+    underline;
+}
+
+
 @media (
   max-width: 750px
 ) {
