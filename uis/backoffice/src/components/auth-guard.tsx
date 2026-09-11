@@ -2,7 +2,7 @@
 
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { LOGIN_ROUTE, getToken } from "@/lib/auth";
 
@@ -21,34 +21,15 @@ export default function AuthGuard({
 
   const isPublic = PUBLIC_ROUTES.includes(pathname);
 
-  const [allowed, setAllowed] = useState(isPublic);
-
   useEffect(() => {
-    if (isPublic) {
-      setAllowed(true);
-
-      return;
-    }
-
-    if (!getToken()) {
-      setAllowed(false);
+    if (!isPublic && !getToken()) {
       router.replace(LOGIN_ROUTE);
-
-      return;
     }
-
-    setAllowed(true);
   }, [isPublic, pathname, router]);
 
-  if (!allowed) {
-    return (
-      <div className="authPage">
-        <p className="authSubtitle">
-          Verificando sesion...
-        </p>
-      </div>
-    );
+  if (isPublic || Boolean(getToken())) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <div className="authPage"><p className="authSubtitle">Verificando sesion...</p></div>;
 }

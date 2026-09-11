@@ -108,9 +108,7 @@ export default function SuppliersPage() {
       setSuppliers(data);
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "No fue posible cargar los proveedores.",
+          "No fue posible cargar los proveedores. Intenta nuevamente.",
       );
     } finally {
       setLoading(false);
@@ -192,9 +190,7 @@ export default function SuppliersPage() {
       await loadSuppliers();
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "No fue posible crear el proveedor.",
+          "No fue posible crear el proveedor. Intenta nuevamente.",
       );
     } finally {
       setMutationKey(null);
@@ -224,9 +220,7 @@ export default function SuppliersPage() {
       await loadSuppliers();
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "No fue posible actualizar la tarifa.",
+          "No fue posible actualizar la tarifa. Intenta nuevamente.",
       );
     } finally {
       setMutationKey(null);
@@ -252,9 +246,7 @@ export default function SuppliersPage() {
       await loadSuppliers();
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "No fue posible actualizar el estado.",
+          "No fue posible actualizar el estado. Intenta nuevamente.",
       );
     } finally {
       setMutationKey(null);
@@ -281,9 +273,7 @@ export default function SuppliersPage() {
       await loadSuppliers();
     } catch (requestError) {
       setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "No fue posible eliminar el proveedor.",
+          "No fue posible eliminar el proveedor. Intenta nuevamente.",
       );
     } finally {
       setMutationKey(null);
@@ -303,7 +293,10 @@ export default function SuppliersPage() {
 
         {error && (
           <div className="feedback feedbackError">
-            {error}
+            <span>{error}</span>
+            <button type="button" onClick={() => void loadSuppliers()}>
+              Reintentar
+            </button>
           </div>
         )}
 

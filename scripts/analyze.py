@@ -54,7 +54,8 @@ def main():
 
         print(
             "Error: no existe "
-            f"el fichero {csv_path}"
+            "el fichero indicado",
+            file=sys.stderr,
         )
 
         sys.exit(1)
@@ -85,29 +86,23 @@ def main():
         ValueError,
     ) as error:
 
-        print(
-            f"Error: {error}"
-        )
-
+        print("Error: no se pudo leer o analizar el CSV.", file=sys.stderr)
         sys.exit(1)
 
-
     print()
 
-    print(
-        format_summary(
-            summary
-        )
-    )
+    print(format_summary(summary))
 
     print()
 
 
-    answer = input(
-        "¿Deseas exportar "
-        "los resultados a CSV? "
-        "[s / n]: "
-    ).strip().lower()
+    try:
+        answer = input(
+            "¿Deseas exportar los resultados a CSV? [s / n]: "
+        ).strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        print("Operacion cancelada.", file=sys.stderr)
+        sys.exit(1)
 
 
     if answer in {
@@ -123,15 +118,11 @@ def main():
         )
 
 
-        result_path.write_text(
-
-            summary_to_csv(
-                summary
-            ),
-
-            encoding="utf-8",
-
-        )
+        try:
+            result_path.write_text(summary_to_csv(summary), encoding="utf-8")
+        except (OSError, UnicodeError, ValueError):
+            print("Error: no se pudieron guardar los resultados.", file=sys.stderr)
+            sys.exit(1)
 
 
         print(

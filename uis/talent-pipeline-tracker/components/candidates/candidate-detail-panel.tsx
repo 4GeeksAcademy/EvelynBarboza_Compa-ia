@@ -9,7 +9,7 @@ import {
   getRecordNotes,
   replaceRecord,
 } from "@/services";
-import type { CandidateRecord, EntityId, RecordNote } from "@/types";
+import type { CandidateRecord, EntityId, JsonObject, RecordNote } from "@/types";
 import {
   CandidateForm,
   type CandidateFormValues,
@@ -140,8 +140,8 @@ function toFormValues(candidate: CandidateRecord): CandidateFormValues {
   };
 }
 
-function buildCandidatePayload(values: CandidateFormValues) {
-  const payload: Record<string, unknown> = {
+function buildCandidatePayload(values: CandidateFormValues): JsonObject {
+  const payload: JsonObject = {
     full_name: values.full_name.trim(),
     email: values.email.trim(),
     phone: values.phone.trim(),
@@ -190,6 +190,7 @@ export function CandidateDetailPanel({
   const [deletingNoteId, setDeletingNoteId] = useState<string | null>(null);
   const [notesSuccessMessage, setNotesSuccessMessage] = useState("");
   const [notesErrorMessage, setNotesErrorMessage] = useState("");
+  const [notesRetry, setNotesRetry] = useState<(() => void) | null>(null);
 
   const editInitialValues = useMemo(() => toFormValues(candidate), [candidate]);
 
@@ -207,10 +208,8 @@ export function CandidateDetailPanel({
       const normalizedNotes = normalizeNotes(notesResponse);
       setNotes(normalizedNotes);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "No se pudieron cargar las notas.";
-
-      setNotesErrorMessage(message);
+      setNotesErrorMessage("No se pudieron cargar las notas. Intenta nuevamente.");
+      setNotesRetry(() => () => { void refreshNotes(candidateId); });
     } finally {
       setIsNotesLoading(false);
     }
@@ -240,10 +239,8 @@ export function CandidateDetailPanel({
       await refreshNotes(candidate.id);
       setNotesSuccessMessage("Nota creada correctamente.");
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "No se pudo crear la nota.";
-
-      setNotesErrorMessage(message);
+      setNotesErrorMessage("No se pudo crear la nota. Intenta nuevamente.");
+      setNotesRetry(null);
     } finally {
       setIsCreatingNote(false);
     }
@@ -259,10 +256,8 @@ export function CandidateDetailPanel({
       await refreshNotes(candidate.id);
       setNotesSuccessMessage("Nota eliminada correctamente.");
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "No se pudo eliminar la nota.";
-
-      setNotesErrorMessage(message);
+      setNotesErrorMessage("No se pudo eliminar la nota. Intenta nuevamente.");
+      setNotesRetry(null);
     } finally {
       setDeletingNoteId(null);
     }
@@ -389,7 +384,18 @@ export function CandidateDetailPanel({
           ) : null}
 
           {notesErrorMessage ? (
-            <p className="mt-3 text-sm font-medium text-red-700">{notesErrorMessage}</p>
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <p className="text-sm font-medium text-red-700">{notesErrorMessage}</p>
+              {notesRetry ? (
+                <button
+                  type="button"
+                  className="text-sm font-medium text-red-700 underline"
+                  onClick={notesRetry}
+                >
+                  Reintentar
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </div>
       </section>

@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
@@ -29,6 +30,8 @@ router = APIRouter(
     prefix="/auth",
     tags=["auth"]
 )
+
+logger = logging.getLogger(__name__)
 
 
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -190,9 +193,9 @@ def forgot_password(data: ForgotPasswordRequest):
 
         try:
             send_reset_email(user["email"], reset_link)
-        except Exception:
+        except OSError:
             # No se filtra el error de envio: la respuesta siempre es 200.
-            pass
+            logger.warning("No se pudo enviar un correo de recuperacion")
 
     # Siempre 200: no revela si el email esta registrado.
     return {

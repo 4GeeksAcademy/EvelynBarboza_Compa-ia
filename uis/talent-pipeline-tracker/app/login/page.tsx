@@ -77,9 +77,12 @@ export default function LoginPage() {
         </div>
 
         {error ? (
-          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-            {error}
-          </p>
+          <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+            <span>{error}</span>
+            <button type="button" onClick={() => window.location.reload()}>
+              Reintentar
+            </button>
+          </div>
         ) : null}
 
         <button

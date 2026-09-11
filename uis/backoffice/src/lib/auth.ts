@@ -157,7 +157,7 @@ function toErrorMessage(data: unknown, status: number): string {
     }
   }
 
-  return `La solicitud fallo con estado ${status}.`;
+  return "No se pudo completar la solicitud. Revisa los datos e inténtalo nuevamente.";
 }
 
 

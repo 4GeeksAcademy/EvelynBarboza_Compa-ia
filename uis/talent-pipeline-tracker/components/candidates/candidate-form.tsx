@@ -185,12 +185,7 @@ export function CandidateForm({
         setValues(defaultValues);
       }
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "No se pudo guardar la candidatura.";
-
-      setErrorMessage(message);
+      setErrorMessage("No se pudo guardar la candidatura. Intenta nuevamente.");
     } finally {
       setIsSubmitting(false);
     }

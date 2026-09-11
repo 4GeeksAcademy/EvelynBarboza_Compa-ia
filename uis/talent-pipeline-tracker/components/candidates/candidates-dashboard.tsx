@@ -80,6 +80,7 @@ export function CandidatesDashboard({
   const searchParams = useSearchParams();
   const [records, setRecords] = useState<CandidateRecord[]>(initialRecords);
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+  const [recordsError, setRecordsError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState(() => {
     return (searchParams.get("status") ?? "").trim();
@@ -98,12 +99,16 @@ export function CandidatesDashboard({
   );
 
   const handleCreateCandidate = async (values: CandidateFormValues) => {
-    await createRecord(buildCandidatePayload(values));
-
-    const latestResponse = await getRecords<RecordsResponse>();
-    const latestRecords = normalizeRecords(latestResponse);
-    setRecords(latestRecords);
-    setIsCreateFormOpen(false);
+    try {
+      setRecordsError("");
+      await createRecord(buildCandidatePayload(values));
+      const latestResponse = await getRecords<RecordsResponse>();
+      setRecords(normalizeRecords(latestResponse));
+      setIsCreateFormOpen(false);
+    } catch {
+      setRecordsError("No se pudo guardar la candidatura. Intenta nuevamente.");
+      throw new Error("No se pudo guardar la candidatura.");
+    }
   };
 
   const filteredRecords = useMemo(() => {
@@ -164,6 +169,9 @@ export function CandidatesDashboard({
   return (
     <>
       <section className="mb-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+        {recordsError ? (
+          <p className="mb-4 text-sm font-medium text-red-700">{recordsError}</p>
+        ) : null}
         {!isCreateFormOpen ? (
           <button
             type="button"

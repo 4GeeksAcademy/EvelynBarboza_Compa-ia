@@ -26,7 +26,7 @@ function toErrorMessage(data: unknown, status: number): string {
     const detail = (data as { detail?: unknown }).detail;
 
     if (typeof detail === "string") {
-      return detail;
+      return "No se pudo completar la solicitud. Revisa los datos e inténtalo nuevamente.";
     }
 
     if (Array.isArray(detail)) {
@@ -47,12 +47,12 @@ function toErrorMessage(data: unknown, status: number): string {
         .filter(Boolean);
 
       if (messages.length > 0) {
-        return messages.join(" | ");
+        return "La solicitud contiene datos no válidos. Revisa los campos e inténtalo nuevamente.";
       }
     }
   }
 
-  return `Request failed with status ${status}.`;
+  return "No se pudo completar la solicitud.";
 }
 
 
@@ -84,9 +84,15 @@ async function request<T>(
 
   const contentType = response.headers.get("content-type") ?? "";
 
-  const payload = contentType.includes("application/json")
-    ? await response.json().catch(() => null)
-    : await response.text().catch(() => null);
+  let payload: unknown = null;
+
+  try {
+    payload = contentType.includes("application/json")
+      ? await response.json()
+      : await response.text();
+  } catch {
+    throw new Error("El servidor devolvio una respuesta no valida.");
+  }
 
   if (!response.ok) {
     throw new Error(
