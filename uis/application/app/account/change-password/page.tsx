@@ -103,9 +103,12 @@ export default function ChangePasswordPage() {
           </div>
 
           {error ? (
-            <p className="feedback feedbackError">
-              {error}
-            </p>
+            <div className="feedback feedbackError">
+              <span>{error}</span>
+              <button type="button" onClick={() => window.location.reload()}>
+                Reintentar
+              </button>
+            </div>
           ) : null}
 
           {success ? (

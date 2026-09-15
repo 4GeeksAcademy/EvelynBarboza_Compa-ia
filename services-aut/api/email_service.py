@@ -1,6 +1,7 @@
 import json
 import os
 import urllib.request
+from html import escape
 
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
@@ -19,7 +20,7 @@ def send_reset_email(to_email: str, reset_link: str) -> None:
             Si fuiste vos, hace clic en el siguiente enlace:
         </p>
         <p>
-            <a href="{reset_link}" style="color: #2563eb;">
+            <a href="{escape(reset_link, quote=True)}" style="color: #2563eb;">
                 Restablecer mi contrasena
             </a>
         </p>

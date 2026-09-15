@@ -126,17 +126,17 @@ function toErrorMessage(data: unknown, status: number): string {
     const detail = (data as { detail?: unknown }).detail;
 
     if (typeof detail === "string") {
-      return detail;
+      return "No se pudo completar la solicitud. Revisa los datos e inténtalo nuevamente.";
     }
 
     const messages = Object.values(readFieldErrors(detail));
 
     if (messages.length > 0) {
-      return messages.join(" | ");
+      return "Revisa los campos indicados e inténtalo nuevamente.";
     }
   }
 
-  return `La solicitud fallo con estado ${status}.`;
+  return "No se pudo completar la solicitud.";
 }
 
 async function request<T>(

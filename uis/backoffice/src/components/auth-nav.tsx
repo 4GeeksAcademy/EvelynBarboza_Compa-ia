@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { getToken, logout } from "@/lib/auth";
 
@@ -11,11 +11,13 @@ import { getToken, logout } from "@/lib/auth";
 export default function AuthNav() {
   const pathname = usePathname();
 
-  const [hasSession, setHasSession] = useState(false);
+  const [sessionPath, setSessionPath] = useState(pathname);
+  const [hasSession, setHasSession] = useState(Boolean(getToken()));
 
-  useEffect(() => {
+  if (sessionPath !== pathname) {
+    setSessionPath(pathname);
     setHasSession(Boolean(getToken()));
-  }, [pathname]);
+  }
 
   if (!hasSession) {
     return (

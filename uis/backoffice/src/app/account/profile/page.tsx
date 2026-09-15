@@ -155,9 +155,12 @@ export default function ProfilePage() {
         </div>
 
         {error ? (
-          <p className="authError">
-            {error}
-          </p>
+          <div className="authError">
+            <span>{error}</span>
+            <button type="button" onClick={() => window.location.reload()}>
+              Reintentar
+            </button>
+          </div>
         ) : null}
 
         {success ? (

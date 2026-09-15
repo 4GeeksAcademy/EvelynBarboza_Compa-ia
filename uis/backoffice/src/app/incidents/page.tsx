@@ -104,6 +104,11 @@ export default function IncidentsPage() {
     setLoading,
   ] = useState(false);
 
+  const [
+    downloading,
+    setDownloading,
+  ] = useState(false);
+
 
   async function handleSubmit(
 
@@ -164,26 +169,20 @@ export default function IncidentsPage() {
         );
 
 
-      const data =
-        await response
-          .json()
-          .catch(
-            () => null
-          );
+      let data: unknown = null;
+
+      try {
+        data = await response.json();
+      } catch {
+        if (response.ok) {
+          throw new Error("Respuesta invalida del servidor.");
+        }
+      }
 
 
       if (!response.ok) {
 
-        throw new Error(
-
-          data?.detail
-          ??
-          (
-            "No fue posible "
-            + "analizar el CSV."
-          )
-
-        );
+        throw new Error("No fue posible analizar el CSV. Intenta nuevamente.");
 
       }
 
@@ -201,15 +200,11 @@ export default function IncidentsPage() {
         instanceof Error
       ) {
 
-        setError(
-          error.message
-        );
+          setError("No fue posible analizar el CSV. Intenta nuevamente.");
 
       } else {
 
-        setError(
-          "Ocurrió un error inesperado."
-        );
+        setError("Ocurrió un error inesperado. Intenta nuevamente.");
 
       }
 
@@ -227,6 +222,7 @@ export default function IncidentsPage() {
 
 
     setError("");
+    setDownloading(true);
 
 
     try {
@@ -243,13 +239,7 @@ export default function IncidentsPage() {
 
       if (!response.ok) {
 
-        throw new Error(
-          (
-            "No fue posible "
-            + "descargar "
-            + "los resultados."
-          )
-        );
+        throw new Error("No fue posible descargar los resultados.");
 
       }
 
@@ -302,11 +292,12 @@ export default function IncidentsPage() {
         instanceof Error
       ) {
 
-        setError(
-          error.message
-        );
+        setError("No fue posible descargar los resultados. Intenta nuevamente.");
 
       }
+
+    } finally {
+      setDownloading(false);
 
     }
 
@@ -343,6 +334,7 @@ export default function IncidentsPage() {
 
 
         <form
+          id="incident-upload-form"
           onSubmit={handleSubmit}
           className="uploadForm"
         >
@@ -427,6 +419,22 @@ export default function IncidentsPage() {
             <div className="error">
 
               {error}
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (result) {
+                    void downloadResults();
+                  } else {
+                    const form = document.getElementById("incident-upload-form");
+                    if (form instanceof HTMLFormElement) {
+                      form.requestSubmit();
+                    }
+                  }
+                }}
+              >
+                Reintentar
+              </button>
 
             </div>
 
@@ -819,13 +827,14 @@ export default function IncidentsPage() {
 
               <button
                 type="button"
-                onClick={
-                  downloadResults
-                }
+                onClick={() => {
+                  void downloadResults();
+                }}
+                disabled={downloading}
                 className="downloadButton"
               >
 
-                Descargar resultados CSV
+                {downloading ? "Descargando..." : "Descargar resultados CSV"}
 
               </button>
 

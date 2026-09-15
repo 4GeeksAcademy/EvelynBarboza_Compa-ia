@@ -46,33 +46,39 @@ async function parseResponseBody(response: Response): Promise<unknown> {
   const contentType = response.headers.get("Content-Type") ?? "";
 
   if (contentType.includes("application/json")) {
-    return response.json();
+    try {
+      return await response.json();
+    } catch {
+      throw new Error("El servidor devolvio una respuesta no valida.");
+    }
   }
 
-  return response.text();
+  try {
+    return await response.text();
+  } catch {
+    throw new Error("No se pudo leer la respuesta del servidor.");
+  }
 }
 
 async function request<TResponse>(
   path: string,
   init?: RequestInit
 ): Promise<TResponse> {
-  const response = await fetch(buildUrl(path), {
-    ...init,
-    headers: withJsonHeaders(init?.headers),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(buildUrl(path), {
+      ...init,
+      headers: withJsonHeaders(init?.headers),
+    });
+  } catch {
+    throw new Error("No se pudo conectar con el servidor.");
+  }
 
   const data = await parseResponseBody(response);
 
   if (!response.ok) {
-    const message =
-      typeof data === "object" &&
-      data !== null &&
-      "message" in data &&
-      typeof (data as { message?: unknown }).message === "string"
-        ? (data as { message: string }).message
-        : `Request failed with status ${response.status}`;
-
-    throw new Error(message);
+    throw new Error("No se pudo completar la solicitud.");
   }
 
   return data as TResponse;

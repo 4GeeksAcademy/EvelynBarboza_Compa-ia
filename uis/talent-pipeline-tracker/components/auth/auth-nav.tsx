@@ -2,18 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { getToken, logout } from "@/lib/auth";
 
 export function AuthNav() {
   const pathname = usePathname();
 
-  const [hasSession, setHasSession] = useState(false);
+  const [sessionPath, setSessionPath] = useState(pathname);
+  const [hasSession, setHasSession] = useState(Boolean(getToken()));
 
-  useEffect(() => {
+  if (sessionPath !== pathname) {
+    setSessionPath(pathname);
     setHasSession(Boolean(getToken()));
-  }, [pathname]);
+  }
 
   return (
     <header className="border-b border-neutral-200 dark:border-neutral-800">

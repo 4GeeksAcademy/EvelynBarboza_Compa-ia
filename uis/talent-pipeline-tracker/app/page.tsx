@@ -2,6 +2,8 @@ import { CandidatesDashboard } from "@/components/candidates/candidates-dashboar
 import { getRecords } from "@/services";
 import type { CandidateRecord } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 type RecordsResponse =
   | CandidateRecord[]
   | { records: CandidateRecord[] }
