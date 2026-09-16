@@ -10,14 +10,14 @@ Los tests usan datos aislados por caso. No se envían emails reales. No se prueb
 
 ### Backend
 
-Desde `services-aut/api/`:
+Desde la raíz del proyecto:
 
 ```bash
 uv run pytest
-uv run pytest --cov=auth --cov-report=term-missing
+uv run pytest --cov=services-aut/api --cov-report=term-missing
 ```
 
-La suite backend se encuentra en `services-aut/api/tests/`.
+La configuración raíz descubre la suite ubicada en `services-aut/api/tests/` y el grupo de dependencias de prueba del proyecto raíz proporciona FastAPI, pytest y pytest-cov.
 
 ### Frontend
 

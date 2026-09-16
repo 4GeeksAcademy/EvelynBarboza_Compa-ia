@@ -78,6 +78,7 @@ def test_register_allows_missing_optional_profile_fields(db):
 
 
 def test_register_currently_hashes_empty_password(db):
+    # Characterizes current behavior; production validation is intentionally unchanged.
     result = users.register(users.UserCreate(email="empty-password@example.com", password=""))
     stored = services.get_user_by_id(result["user"]["id"])["hashed_password"]
 

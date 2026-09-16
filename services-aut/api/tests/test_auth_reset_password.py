@@ -86,6 +86,7 @@ def test_reset_password_rejects_unpersisted_token(seed_user, db):
 
 
 def test_reset_password_rejects_used_token(used_reset_token, db):
+    # The persisted used flag makes a reset token single-use.
     with pytest.raises(HTTPException) as error:
         auth.reset_password(auth.ResetPasswordRequest(token=used_reset_token["token"], new_password="New-Password-456"))
 
@@ -118,6 +119,7 @@ def test_reset_password_rejects_second_use_of_same_token(reset_token_record, db)
     data = auth.ResetPasswordRequest(token=reset_token_record["token"], new_password="New-Password-456")
     auth.reset_password(data)
 
+    # Characterizes the persisted state after the first successful reset.
     with pytest.raises(HTTPException) as error:
         auth.reset_password(data)
 

@@ -60,6 +60,7 @@ def test_login_token_contains_user_claims(seed_user, known_password):
 
 
 def test_login_currently_allows_inactive_user(seed_inactive_user, known_password):
+    # This is an explicit characterization of current behavior, not a desired policy.
     result = auth.login(login_form(seed_inactive_user["email"], known_password))
 
     assert result["token_type"] == "bearer"

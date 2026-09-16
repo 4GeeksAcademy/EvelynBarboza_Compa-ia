@@ -69,4 +69,5 @@ def test_get_current_user_rejects_existingly_signed_token_for_missing_user(db):
 def test_get_current_user_behavior_for_token_without_exp(seed_user):
     token = jwt.encode({"sub": seed_user["id"]}, auth.JWT_SECRET, algorithm=auth.ALGORITHM)
 
+    # Characterizes the current implementation: jose accepts this token without exp.
     assert auth.get_current_user(token) == seed_user
