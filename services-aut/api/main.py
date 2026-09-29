@@ -2,10 +2,14 @@ import logging
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from sqlmodel import SQLModel
 
 from auth import router as auth_router
+from database import engine
 from profiles import router as profiles_router
+from routers.inventory import router as inventory_router
 from users import router as users_router
+import models
 
 
 app = FastAPI(
@@ -16,6 +20,10 @@ app = FastAPI(
 app.include_router(users_router)
 app.include_router(profiles_router)
 app.include_router(auth_router)
+
+SQLModel.metadata.create_all(engine)
+
+app.include_router(inventory_router)
 
 logger = logging.getLogger(__name__)
 
