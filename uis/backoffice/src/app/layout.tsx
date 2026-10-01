@@ -14,12 +14,12 @@ import "./globals.css";
 export const metadata: Metadata = {
 
   title:
-    "Brasaland Backoffice",
+    "TrackFlow Backoffice",
 
   description:
     (
       "Panel interno "
-      + "de Brasaland"
+      + "de TrackFlow"
     ),
 
 };
@@ -50,7 +50,7 @@ export default function RootLayout({
               href="/"
               className="logo"
             >
-              BRASALAND
+              TRACKFLOW
             </Link>
 
 

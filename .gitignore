@@ -9,3 +9,4 @@ __pycache__/
 results.csv
 data/db.json
 **/data/db.json
+.env.local

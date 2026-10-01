@@ -1,9 +1,10 @@
 // El servicio de autenticacion es independiente del API de incidencias.
 const API_BASE = "/auth-backend";
 
-const TOKEN_KEY = "backoffice_token";
+export const TOKEN_STORAGE_KEY = "backoffice_token";
 
-export const LOGIN_ROUTE = "/login";
+export const LOGIN_PATH = "/login";
+export const LOGIN_ROUTE = LOGIN_PATH;
 
 export const HOME_ROUTE = "/";
 
@@ -65,11 +66,16 @@ export function getToken(): string | null {
     return null;
   }
 
-  const token = window.localStorage.getItem(TOKEN_KEY);
+  const token = window.localStorage.getItem(TOKEN_STORAGE_KEY);
 
   return token && token.length > 0
     ? token
     : null;
+}
+
+
+export function getAuthToken(): string | null {
+  return getToken();
 }
 
 
@@ -78,7 +84,7 @@ export function setToken(token: string): void {
     return;
   }
 
-  window.localStorage.setItem(TOKEN_KEY, token);
+  window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
 }
 
 
@@ -87,7 +93,7 @@ export function clearToken(): void {
     return;
   }
 
-  window.localStorage.removeItem(TOKEN_KEY);
+  window.localStorage.removeItem(TOKEN_STORAGE_KEY);
 }
 
 
@@ -96,7 +102,7 @@ function goToLogin(): void {
     return;
   }
 
-  window.location.replace(LOGIN_ROUTE);
+  window.location.replace(LOGIN_PATH);
 }
 
 
