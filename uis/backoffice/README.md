@@ -1,8 +1,8 @@
-# Brasaland Backoffice
+# TrackFlow Backoffice
 
 Panel interno realizado con Next.js, React y TypeScript.
 
-Permite cargar el CSV de incidencias de Brasaland, visualizar métricas y descargar los resultados.
+Permite cargar el CSV de incidencias de TrackFlow, visualizar métricas y descargar los resultados.
 
 ## Ejecutar
 

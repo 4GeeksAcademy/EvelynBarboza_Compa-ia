@@ -1,6 +1,8 @@
 import logging
+import os
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlmodel import SQLModel
 
@@ -14,6 +16,26 @@ import models
 
 app = FastAPI(
     title="Company API"
+)
+
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+codespace_name = os.getenv("CODESPACE_NAME")
+codespaces_domain = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
+if codespace_name and codespaces_domain:
+    allowed_origins.append(
+        f"https://{codespace_name}-3000.{codespaces_domain}"
+    )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
  
 
