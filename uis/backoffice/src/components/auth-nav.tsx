@@ -43,6 +43,14 @@ export default function AuthNav() {
         Incidencias
       </Link>
 
+      <Link href="/incidents/dashboard">
+        Panel de incidencias
+      </Link>
+
+      <Link href="/incidents/new">
+        Registrar incidencia
+      </Link>
+
       <Link href="/account/profile">
         Mi perfil
       </Link>
