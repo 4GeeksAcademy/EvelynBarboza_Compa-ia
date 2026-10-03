@@ -85,6 +85,12 @@ input {
 
   gap:
     24px;
+
+  flex-wrap:
+    wrap;
+
+  justify-content:
+    flex-end;
 }
 
 
@@ -636,6 +642,12 @@ button:disabled {
 
     gap:
       14px;
+  }
+
+
+  .navLinks {
+    justify-content:
+      center;
   }
 
 

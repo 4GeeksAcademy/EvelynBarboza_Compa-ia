@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
         destination:
           (
             "http://127.0.0.1:"
-            + "8000/:path*"
+            + "8001/:path*"
           ),
       },
 
