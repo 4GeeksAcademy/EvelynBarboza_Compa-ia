@@ -8,6 +8,7 @@ from fastapi import (
 )
 
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import (
     JSONResponse,
     Response,
@@ -21,6 +22,9 @@ from packages.incidents_analysis import (
 from services.api.routes.suppliers import (
     router as suppliers_router,
 )
+from services.api.routes.incidents import (
+	router as incidents_router,
+)
 
 
 app = FastAPI(
@@ -33,8 +37,29 @@ app = FastAPI(
 app.include_router(
     suppliers_router
 )
+app.include_router(incidents_router)
 
 logger = logging.getLogger(__name__)
+
+
+@app.exception_handler(RequestValidationError)
+async def handle_request_validation_error(
+    request: Request,
+    exc: RequestValidationError,
+):
+    first_error = exc.errors()[0]
+    location = first_error.get("loc", [])
+    field = str(location[-1]) if location else "body"
+    context_error = first_error.get("ctx", {}).get("error")
+    message = str(context_error or first_error.get("msg", "Dato inválido"))
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "validation_error",
+            "field": field,
+            "message": message,
+        },
+    )
 
 
 @app.exception_handler(Exception)
@@ -42,7 +67,10 @@ async def handle_unexpected_error(request: Request, exc: Exception):
     logger.exception("Error inesperado procesando la solicitud")
     return JSONResponse(
         status_code=500,
-        content={"detail": "Ocurrio un error interno. Intenta nuevamente."},
+        content={
+            "error": "internal_error",
+            "message": "Ocurrió un error inesperado",
+        },
     )
 
 
