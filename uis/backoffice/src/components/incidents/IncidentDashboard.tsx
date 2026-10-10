@@ -62,27 +62,45 @@ function labelFor(value: string) {
 function SummaryGroup({
   title,
   values,
+  placeholders,
+  loading,
 }: {
   title: string;
-  values: Record<string, number>;
+  values?: Record<string, number>;
+  placeholders: readonly string[];
+  loading: boolean;
 }) {
-  const entries = Object.entries(values);
+  const entries = Object.entries(values ?? {});
 
   return (
     <section className={styles.summaryGroup} aria-label={title}>
       <h3>{title}</h3>
-      {entries.length === 0 ? (
-        <p className={styles.summaryEmpty}>Sin datos</p>
-      ) : (
-        <dl className={styles.summaryList}>
-          {entries.map(([key, count]) => (
+      <div className={styles.summaryBody}>
+        <dl
+          className={`${styles.summaryList} ${styles.summaryPlaceholder}`}
+          aria-hidden="true"
+          data-loading={loading}
+        >
+          {placeholders.map((key) => (
             <div key={key}>
-              <dt>{labelFor(key)}</dt>
-              <dd>{count}</dd>
+              <dt><span>{labelFor(key)}</span></dt>
+              <dd><span>000</span></dd>
             </div>
           ))}
         </dl>
-      )}
+        {values && (entries.length === 0 ? (
+          <p className={styles.summaryEmpty}>Sin datos</p>
+        ) : (
+          <dl className={styles.summaryList}>
+            {entries.map(([key, count]) => (
+              <div key={key}>
+                <dt>{labelFor(key)}</dt>
+                <dd>{count}</dd>
+              </div>
+            ))}
+          </dl>
+        ))}
+      </div>
     </section>
   );
 }
@@ -196,11 +214,19 @@ export default function IncidentDashboard() {
 
   return (
     <div className={styles.dashboard}>
-      <section className={styles.summarySection} aria-labelledby="incident-summary-title">
+      <section
+        className={styles.summarySection}
+        aria-labelledby="incident-summary-title"
+        aria-busy={summaryLoading}
+      >
         <div className={styles.sectionHeading}>
           <div>
             <h2 id="incident-summary-title">Resumen</h2>
-            {summary && <p>{summary.total} incidencias registradas</p>}
+            <p className={styles.summaryStatus} role={summaryLoading ? "status" : undefined}>
+              {summaryLoading
+                ? "Cargando resumen..."
+                : summary ? `${summary.total} incidencias registradas` : "Resumen no disponible"}
+            </p>
           </div>
           {summaryError && (
             <button
@@ -213,18 +239,15 @@ export default function IncidentDashboard() {
           )}
         </div>
 
-        {summaryLoading ? (
-          <p className={styles.feedback} role="status">Cargando resumen...</p>
-        ) : summaryError ? (
+        {summaryError && (
           <p className={styles.feedback} role="alert">{summaryError}</p>
-        ) : summary ? (
-          <div className={styles.summaryGroups}>
-            <SummaryGroup title="Por estado" values={summary.by_status} />
-            <SummaryGroup title="Por categoría" values={summary.by_category} />
-            <SummaryGroup title="Por origen" values={summary.by_origin} />
-            <SummaryGroup title="Por sede" values={summary.by_branch} />
-          </div>
-        ) : null}
+        )}
+        <div className={styles.summaryGroups}>
+          <SummaryGroup title="Por estado" values={summary?.by_status} placeholders={INCIDENT_STATUSES} loading={summaryLoading && !summary} />
+          <SummaryGroup title="Por categoría" values={summary?.by_category} placeholders={INCIDENT_CATEGORIES} loading={summaryLoading && !summary} />
+          <SummaryGroup title="Por origen" values={summary?.by_origin} placeholders={INCIDENT_ORIGINS} loading={summaryLoading && !summary} />
+          <SummaryGroup title="Por sede" values={summary?.by_branch} placeholders={INCIDENT_BRANCHES} loading={summaryLoading && !summary} />
+        </div>
       </section>
 
       <section className={styles.listSection} aria-labelledby="incident-list-title">

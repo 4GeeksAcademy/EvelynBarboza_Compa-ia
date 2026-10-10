@@ -6,7 +6,7 @@ import InventoryNav from "@/components/inventory/InventoryNav";
 import RequireAuth from "@/components/inventory/RequireAuth";
 import { listOrders } from "@/lib/inventory";
 import type { StockMovement } from "@/types/inventory";
-import styles from "@/app/backoffice/inventory/inventory.module.css";
+import styles from "@/components/inventory/inventory.module.css";
 
 export default function OrdersPage() {
   return (

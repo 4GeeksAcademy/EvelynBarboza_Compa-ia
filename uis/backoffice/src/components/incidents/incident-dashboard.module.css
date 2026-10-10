@@ -50,6 +50,37 @@
   font-size: 14px;
 }
 
+.summaryStatus {
+  min-height: 1.5em;
+}
+
+.summaryBody {
+  display: grid;
+}
+
+.summaryBody > * {
+  grid-area: 1 / 1;
+  align-self: start;
+}
+
+.summaryPlaceholder {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.summaryPlaceholder[data-loading="true"] {
+  visibility: visible;
+}
+
+.summaryPlaceholder span {
+  border-radius: 3px;
+  background: #e7ebee;
+  color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .summaryList {
   display: grid;
   gap: 8px;

@@ -11,7 +11,7 @@ import {
   listProducts,
 } from "@/lib/inventory";
 import type { SKU } from "@/types/inventory";
-import styles from "@/app/backoffice/inventory/inventory.module.css";
+import styles from "@/components/inventory/inventory.module.css";
 
 export default function OutboundPage() {
   return (

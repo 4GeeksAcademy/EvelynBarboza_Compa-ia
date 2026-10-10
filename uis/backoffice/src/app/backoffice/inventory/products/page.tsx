@@ -7,7 +7,7 @@ import InventoryNav from "@/components/inventory/InventoryNav";
 import RequireAuth from "@/components/inventory/RequireAuth";
 import { listProducts } from "@/lib/inventory";
 import type { SKU } from "@/types/inventory";
-import styles from "@/app/backoffice/inventory/inventory.module.css";
+import styles from "@/components/inventory/inventory.module.css";
 
 // Umbrales visuales del hito.
 // <= 5: bajo | <= 15: atención | > 15: saludable.
