@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { getToken, logout } from "@/lib/auth";
+import { ThemeToggleButton } from "@/components/theme-provider";
 
 export function AuthNav() {
   const pathname = usePathname();
@@ -18,22 +19,23 @@ export function AuthNav() {
   }
 
   return (
-    <header className="border-b border-neutral-200 dark:border-neutral-800">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="font-semibold tracking-tight">
-          Talent Pipeline
+    <header className="navbar">
+      <div className="navContent">
+        <Link href="/" className="brand" aria-label="TrackFlow, inicio">
+          <span className="brandTrack">Track</span><span className="brandFlow">Flow</span><span className="brandDot">.</span>
         </Link>
 
-        <nav className="flex items-center gap-4 text-sm">
+        <nav className="navLinks">
           {hasSession ? (
             <>
-              <Link href="/account/profile" className="hover:underline">
+              <ThemeToggleButton />
+              <Link href="/account/profile">
                 Mi perfil
               </Link>
 
               <button
                 type="button"
-                className="hover:underline"
+                className="navLogout"
                 onClick={() => logout()}
               >
                 Salir
@@ -41,11 +43,12 @@ export function AuthNav() {
             </>
           ) : (
             <>
-              <Link href="/login" className="hover:underline">
+              <ThemeToggleButton />
+              <Link href="/login">
                 Entrar
               </Link>
 
-              <Link href="/register" className="hover:underline">
+              <Link href="/register">
                 Crear cuenta
               </Link>
             </>

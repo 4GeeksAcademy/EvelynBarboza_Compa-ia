@@ -277,3 +277,157 @@ th {
 .inlineEdit input {
   width: 96px;
 }
+
+:root {
+  color-scheme: light;
+  --page-background: #f4f6f8;
+  --page-foreground: #1a2530;
+  --surface-background: #ffffff;
+  --surface-border: #d7dde3;
+  --muted-foreground: #63707c;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-background: #111923;
+  --page-foreground: #e8edf4;
+  --surface-background: #1b2633;
+  --surface-border: #354354;
+  --muted-foreground: #a8b4c2;
+}
+
+body {
+  background: var(--page-background);
+  color: var(--page-foreground);
+}
+
+.topbar {
+  background: var(--surface-background);
+  color: var(--page-foreground);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.topbarInner {
+  width: min(1400px, 92%);
+  min-height: 76px;
+  height: auto;
+  gap: 24px;
+}
+
+.brand,
+.logo {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.brandTrack {
+  color: #203f91;
+}
+
+.brandFlow {
+  color: #4085f6;
+}
+
+.brandDot {
+  margin-left: 2px;
+  color: #08b6c8;
+}
+
+.navGroup {
+  justify-content: flex-end;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.themeToggle {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--surface-border);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.themeToggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.card {
+  background: var(--surface-background);
+  border-color: var(--surface-border);
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--surface-background);
+  color: var(--page-foreground);
+  border-color: var(--surface-border);
+}
+
+.muted,
+.subtitle {
+  color: var(--muted-foreground);
+}
+
+html[data-theme="dark"] .authLink,
+html[data-theme="dark"] .hero p,
+html[data-theme="dark"] .pageHeader p {
+  color: var(--muted-foreground);
+}
+
+html[data-theme="dark"] th,
+html[data-theme="dark"] td {
+  border-color: var(--surface-border);
+}
+
+html[data-theme="dark"] th {
+  background: #202d3b;
+}
+
+html[data-theme="dark"] .buttonSecondary {
+  background: #354354;
+  color: #e8edf4;
+}
+
+html[data-theme="dark"] .brandTrack {
+  color: #9db3ff;
+}
+
+@media (max-width: 760px) {
+  .topbarInner {
+    padding: 14px 0;
+    align-items: flex-start;
+  }
+
+  .brand,
+  .logo {
+    font-size: 30px;
+  }
+
+  .navGroup {
+    gap: 12px 18px;
+  }
+}
+
+@media (max-width: 540px) {
+  .topbarInner {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navGroup {
+    justify-content: center;
+  }
+}
