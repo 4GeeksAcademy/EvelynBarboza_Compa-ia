@@ -34,11 +34,21 @@ class AuthMeResponse(BaseModel):
     email: str
     role: str
     profile: Optional[ProfileResponse]
+    theme: Literal["light", "dark"] = "light"
 
 
 class LoginResponse(BaseModel):
     access_token: str
     token_type: Literal["bearer"]
+    theme: Literal["light", "dark"] = "light"
+
+
+class ThemePreferenceUpdate(BaseModel):
+    theme: Literal["light", "dark"]
+
+
+class ThemePreferenceResponse(BaseModel):
+    theme: Literal["light", "dark"]
 
 
 class MessageResponse(BaseModel):

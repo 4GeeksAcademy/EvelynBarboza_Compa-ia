@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import AuthGuard from "@/components/auth-guard";
 import AuthNav from "@/components/auth-nav";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "./globals.css";
 
@@ -38,31 +39,30 @@ export default function RootLayout({
 
   return (
 
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
 
       <body>
 
-        <nav className="navbar">
+        <ThemeProvider>
+          <nav className="navbar">
 
-          <div className="navContent">
+            <div className="navContent">
 
-            <Link
-              href="/"
-              className="logo"
-            >
-              TRACKFLOW
-            </Link>
+              <Link href="/" className="logo" aria-label="TrackFlow, inicio">
+                <span className="brandTrack">Track</span><span className="brandFlow">Flow</span><span className="brandDot">.</span>
+              </Link>
 
 
-            <AuthNav />
-          </div>
+              <AuthNav />
+            </div>
 
-        </nav>
+          </nav>
 
 
-        <AuthGuard>
-          {children}
-        </AuthGuard>
+          <AuthGuard>
+            {children}
+          </AuthGuard>
+        </ThemeProvider>
 
       </body>
 

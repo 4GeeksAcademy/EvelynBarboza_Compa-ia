@@ -6,6 +6,7 @@ from jose import jwt
 from passlib.hash import bcrypt
 
 import auth
+import services
 
 
 def login_form(email, password):
@@ -17,6 +18,15 @@ def test_login_returns_access_token_for_valid_credentials(seed_user, known_passw
 
     assert result["token_type"] == "bearer"
     assert result["access_token"]
+    assert result["theme"] == "light"
+
+
+def test_login_returns_saved_theme(seed_user):
+    services.update_user(seed_user["id"], {"theme": "dark"})
+
+    result = auth.login(login_form(seed_user["email"], "Correct-Horse-123"))
+
+    assert result["theme"] == "dark"
 
 
 def test_login_rejects_unknown_email(db):
