@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Optional
+from typing import Annotated, Optional
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
 from passlib.hash import bcrypt
-from pydantic import BaseModel
+from pydantic import BaseModel, StringConstraints
 
 from auth import get_current_user
 from services import (
@@ -17,6 +17,7 @@ from services import (
     get_user_by_id,
     update_user
 )
+from schemas import MessageResponse, RegistrationResponse, UserResponse
 
 
 router = APIRouter(
@@ -34,8 +35,8 @@ class Role(str, Enum):
 class UserCreate(BaseModel):
     email: str
     password: str
-    name: Optional[str] = None
-    phone: Optional[str] = None
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+    phone: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
     address: Optional[str] = None
 
 
@@ -70,13 +71,16 @@ def owner_or_admin(
         )
 
 
-@router.post("")
+@router.post("", response_model=RegistrationResponse)
 def register(data: UserCreate):
 
     if get_user_by_email(data.email):
         raise HTTPException(
             status_code=400,
-            detail="El email ya está registrado"
+            detail=(
+                "Ya existe una cuenta registrada con ese email. "
+                "Inicia sesión o utiliza otro email."
+            )
         )
 
     user_id = str(uuid4())
@@ -112,17 +116,23 @@ def register(data: UserCreate):
     }
 
 
-@router.get("")
+@router.get("", response_model=list[UserResponse])
 def list_users(
     current_user: dict = Depends(get_current_user)
 ):
+    if current_user["role"] != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Solo un admin puede listar usuarios"
+        )
+
     return [
         public_user(user)
         for user in get_all_users()
     ]
 
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=UserResponse)
 def get_user(
     user_id: str,
     current_user: dict = Depends(get_current_user)
@@ -143,7 +153,7 @@ def get_user(
     return public_user(user)
 
 
-@router.put("/{user_id}")
+@router.put("/{user_id}", response_model=UserResponse | None)
 def edit_user(
     user_id: str,
     data: UserUpdate,
@@ -195,7 +205,7 @@ def edit_user(
     return public_user(user)
 
 
-@router.delete("/{user_id}")
+@router.delete("/{user_id}", response_model=MessageResponse)
 def remove_user(
     user_id: str,
     current_user: dict = Depends(get_current_user)

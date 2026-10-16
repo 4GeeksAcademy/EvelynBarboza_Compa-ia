@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import styles from "@/app/backoffice/inventory/inventory.module.css";
+import styles from "@/components/inventory/inventory.module.css";
 
 export default function InventoryNav() {
   return (

@@ -13,6 +13,7 @@ from services.api.models import (
 	SupplierCategory,
 	SupplierCountry,
 	SupplierCreate,
+	SupplierDeleteResponse,
 	SupplierRateUpdate,
 	SupplierResponse,
 	SupplierStatusUpdate,
@@ -146,6 +147,7 @@ def update_supplier_status_endpoint(
 
 @router.delete(
 	"/{supplier_id}",
+	response_model=SupplierDeleteResponse,
 )
 def delete_supplier_endpoint(
 	supplier_id: int,

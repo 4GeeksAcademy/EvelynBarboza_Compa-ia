@@ -69,14 +69,29 @@ describe("application auth client", () => {
 
   it("registers and sends profile updates", async () => {
     fetchMock.mockResolvedValueOnce(response(204));
-    await expect(registerUser({ email: "a@b.com", password: "pw", name: "Ana" })).resolves.toBeUndefined();
+    await expect(registerUser({ email: "a@b.com", password: "pw", name: "Ana", phone: "123" })).resolves.toBeUndefined();
     expect(fetchMock.mock.calls[0][0]).toBe("/auth-backend/users");
 
     setToken("jwt");
     const profile = { id: "p1", user_id: "u1", name: "Ana", phone: null, address: null };
     fetchMock.mockResolvedValue(response(200, profile));
-    await expect(updateMyProfile({ name: "Ana" })).resolves.toEqual(profile);
+    await expect(updateMyProfile({ name: "Ana", phone: "123" })).resolves.toEqual(profile);
     expect(fetchMock.mock.calls[1][1].headers.Authorization).toBe("Bearer jwt");
+  });
+
+  it("shows a clear message when the account email already exists", async () => {
+    fetchMock.mockResolvedValueOnce(response(400, {
+      detail: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
+    }));
+
+    await expect(registerUser({
+      email: "a@b.com",
+      password: "pw",
+      name: "Ana",
+      phone: "123",
+    })).rejects.toMatchObject({
+      message: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
+    });
   });
 
   it("gets the current user and supports password flows", async () => {

@@ -19,6 +19,39 @@ from packages.shared import (
 )
 
 
+class HealthResponse(BaseModel):
+    message: str
+
+
+class AnalysisBreakdown(BaseModel):
+    count: int
+    percentage: float
+
+
+class AnalysisSatisfaction(BaseModel):
+    closed_cases: int
+    scored_cases: int
+    average: float | None
+    scores: dict[str, int]
+
+
+class IncidentAnalysisResponse(BaseModel):
+    company: str
+    source_file: str
+    total_records: int
+    valid_records: int
+    invalid_records: int
+    invalid_breakdown: dict[str, int]
+    by_category: dict[str, AnalysisBreakdown]
+    by_status: dict[str, AnalysisBreakdown]
+    by_country: dict[str, AnalysisBreakdown]
+    satisfaction: AnalysisSatisfaction
+
+
+class SupplierDeleteResponse(BaseModel):
+    message: str
+
+
 SupplierCountry = Literal["USA", "Spain"]
 SupplierCurrency = Literal["USD", "EUR"]
 SupplierStatus = Literal["active", "suspended"]

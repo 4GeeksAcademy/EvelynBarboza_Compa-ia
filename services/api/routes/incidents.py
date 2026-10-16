@@ -28,6 +28,7 @@ from services.api.models import (
 	IncidentSummary,
 	IncidentStatusTransitionError,
 	IncidentStatusUpdate,
+	IncidentValidationError,
 )
 
 
@@ -46,11 +47,10 @@ REQUIRED_FIELD_MESSAGES = {
 def validation_error_response(field: str, message: str):
 	return JSONResponse(
 		status_code=status.HTTP_400_BAD_REQUEST,
-		content={
-			"error": "validation_error",
-			"field": field,
-			"message": message,
-		},
+		content=IncidentValidationError(
+			field=field,
+			message=message,
+		).model_dump(mode="json"),
 	)
 
 
@@ -58,6 +58,7 @@ def validation_error_response(field: str, message: str):
 	"",
 	response_model=IncidentResponse,
 	status_code=status.HTTP_201_CREATED,
+	responses={400: {"model": IncidentValidationError}},
 )
 async def create_incident_endpoint(request: Request):
 	try:
@@ -77,7 +78,11 @@ async def create_incident_endpoint(request: Request):
 	return create_incident(payload.model_dump())
 
 
-@router.get("", response_model=list[IncidentResponse])
+@router.get(
+	"",
+	response_model=list[IncidentResponse],
+	responses={400: {"model": IncidentValidationError}},
+)
 def list_incidents_endpoint(
 	status: str | None = None,
 	origin: str | None = None,
@@ -147,10 +152,7 @@ def get_incident_endpoint(incident_id: int):
 	if incident is None:
 		return JSONResponse(
 			status_code=status.HTTP_404_NOT_FOUND,
-			content={
-				"error": "not_found",
-				"message": "Incidencia no encontrada",
-			},
+			content=IncidentNotFoundError().model_dump(mode="json"),
 		)
 	return incident
 
@@ -172,19 +174,14 @@ def update_incident_status_endpoint(
 	except ValueError as error:
 		return JSONResponse(
 			status_code=status.HTTP_400_BAD_REQUEST,
-			content={
-				"error": "invalid_status_transition",
-				"field": "status",
-				"message": str(error),
-			},
+			content=IncidentStatusTransitionError(
+				message=str(error),
+			).model_dump(mode="json"),
 		)
 
 	if incident is None:
 		return JSONResponse(
 			status_code=status.HTTP_404_NOT_FOUND,
-			content={
-				"error": "not_found",
-				"message": "Incidencia no encontrada",
-			},
+			content=IncidentNotFoundError().model_dump(mode="json"),
 		)
 	return incident

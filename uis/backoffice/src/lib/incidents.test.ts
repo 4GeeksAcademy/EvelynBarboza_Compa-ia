@@ -146,6 +146,76 @@ describe("incident form", () => {
 });
 
 describe("incident dashboard", () => {
+  it("reserves all four summary groups while loading and keeps placeholders after data arrives", async () => {
+    let resolveSummary!: (value: Response) => void;
+    fetchMock.mockImplementation((input: RequestInfo | URL) => (
+      String(input).includes("/summary")
+        ? new Promise((resolve) => { resolveSummary = resolve; })
+        : Promise.resolve(response([incident]))
+    ));
+    const mounted = await render(createElement(IncidentDashboard));
+    const summarySection = mounted.container.querySelector("[aria-labelledby='incident-summary-title']")!;
+
+    expect(summarySection.getAttribute("aria-busy")).toBe("true");
+    expect(summarySection.querySelectorAll(".summaryGroup")).toHaveLength(4);
+    expect(summarySection.querySelectorAll("[data-loading='true']")).toHaveLength(4);
+    expect(summarySection.querySelectorAll(".summaryPlaceholder div")).toHaveLength(21);
+    expect(mounted.container.textContent).toContain("Pedido detenido");
+
+    await act(async () => {
+      resolveSummary(response(summary));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(summarySection.getAttribute("aria-busy")).toBe("false");
+    expect(summarySection.querySelectorAll("[data-loading='true']")).toHaveLength(0);
+    expect(summarySection.querySelectorAll(".summaryPlaceholder[aria-hidden='true']")).toHaveLength(4);
+    expect(summarySection.textContent).toContain("1 incidencias registradas");
+    expect(summarySection.querySelectorAll("dl:not([aria-hidden]) dd")).toHaveLength(4);
+    await mounted.unmount();
+  });
+
+  it("keeps the previous summary visible while a successful status update refreshes it", async () => {
+    let resolveRefresh!: (value: Response) => void;
+    let summaryCalls = 0;
+    fetchMock.mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/summary")) {
+        summaryCalls += 1;
+        return summaryCalls === 1
+          ? Promise.resolve(response(summary))
+          : new Promise((resolve) => { resolveRefresh = resolve; });
+      }
+      if (url.endsWith("/1/status")) {
+        return Promise.resolve(response({ ...incident, status: "in_progress" }));
+      }
+      return Promise.resolve(response([incident]));
+    });
+    const mounted = await render(createElement(IncidentDashboard));
+    const summarySection = mounted.container.querySelector("[aria-labelledby='incident-summary-title']")!;
+    const statusSelect = mounted.container.querySelector(
+      "select[aria-label='Cambiar estado de Pedido detenido']",
+    ) as HTMLSelectElement;
+
+    await act(async () => {
+      setValue(statusSelect, "in_progress");
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(summarySection.getAttribute("aria-busy")).toBe("true");
+    expect(summarySection.querySelectorAll("dl:not([aria-hidden]) dd")).toHaveLength(4);
+    expect(summarySection.querySelectorAll("[data-loading='true']")).toHaveLength(0);
+
+    await act(async () => {
+      resolveRefresh(response({ ...summary, by_status: { in_progress: 1 } }));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(summarySection.getAttribute("aria-busy")).toBe("false");
+    expect(summarySection.querySelector("dl:not([aria-hidden])")?.textContent).toContain("En curso");
+    await mounted.unmount();
+  });
+
   it("keeps the list usable if the summary fails and renders all filters", async () => {
     fetchMock.mockImplementation((input: RequestInfo | URL) => (
       String(input).includes("/summary")

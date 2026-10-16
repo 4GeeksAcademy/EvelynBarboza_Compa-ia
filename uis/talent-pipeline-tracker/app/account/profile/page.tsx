@@ -65,7 +65,11 @@ export default function ProfilePage() {
     setSaving(true);
 
     try {
-      const profile = await updateMyProfile({ name, phone, address });
+      const profile = await updateMyProfile({
+        name: name.trim(),
+        phone: phone.trim(),
+        address,
+      });
 
       setName(profile.name ?? "");
       setPhone(profile.phone ?? "");
@@ -106,6 +110,7 @@ export default function ProfilePage() {
             id="name"
             name="name"
             type="text"
+            required
             value={name}
             onChange={(event) => setName(event.target.value)}
             className={INPUT_CLASS}
@@ -120,7 +125,8 @@ export default function ProfilePage() {
           <input
             id="phone"
             name="phone"
-            type="text"
+            type="tel"
+            required
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
             className={INPUT_CLASS}

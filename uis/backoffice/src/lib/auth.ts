@@ -27,8 +27,8 @@ export type CurrentUser = {
 
 
 export type ProfileUpdatePayload = {
-  name?: string;
-  phone?: string;
+  name: string;
+  phone: string;
   address?: string;
 };
 
@@ -36,8 +36,8 @@ export type ProfileUpdatePayload = {
 export type RegisterPayload = {
   email: string;
   password: string;
-  name?: string;
-  phone?: string;
+  name: string;
+  phone: string;
   address?: string;
 };
 

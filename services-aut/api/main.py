@@ -10,6 +10,7 @@ from auth import router as auth_router
 from database import engine
 from profiles import router as profiles_router
 from routers.inventory import router as inventory_router
+from schemas import HealthResponse
 from users import router as users_router
 import models
 
@@ -59,7 +60,7 @@ async def handle_unexpected_error(request: Request, exc: Exception):
     )
 
 
-@app.get("/")
+@app.get("/", response_model=HealthResponse)
 def home():
     return {
         "message": "API funcionando"

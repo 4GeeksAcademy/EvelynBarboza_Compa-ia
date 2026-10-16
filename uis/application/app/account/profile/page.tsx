@@ -71,8 +71,8 @@ export default function ProfilePage() {
 
     try {
       const profile = await updateMyProfile({
-        name,
-        phone,
+        name: name.trim(),
+        phone: phone.trim(),
         address,
       });
 
@@ -124,6 +124,7 @@ export default function ProfilePage() {
               id="name"
               name="name"
               type="text"
+              required
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
@@ -137,7 +138,8 @@ export default function ProfilePage() {
             <input
               id="phone"
               name="phone"
-              type="text"
+              type="tel"
+              required
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
             />

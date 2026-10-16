@@ -1,7 +1,48 @@
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+
+class HealthResponse(BaseModel):
+    message: str
+
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    is_active: bool
+    role: str
+    created_at: datetime
+
+
+class ProfileResponse(BaseModel):
+    id: str
+    user_id: str
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+
+
+class RegistrationResponse(BaseModel):
+    user: UserResponse
+    profile: ProfileResponse
+
+
+class AuthMeResponse(BaseModel):
+    id: str
+    email: str
+    role: str
+    profile: Optional[ProfileResponse]
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: Literal["bearer"]
+
+
+class MessageResponse(BaseModel):
+    message: str
 
 
 class SKUCreate(BaseModel):
@@ -61,10 +102,19 @@ class StockExitResponse(StockExitCreate):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OrderSKUResponse(BaseModel):
+    id: int
+    name: str
+    sku: str
+    client_name: str
+    category: str
+    warehouse: str
+
+
 class OrderResponse(BaseModel):
     id: int
-    movement_type: str
+    movement_type: Literal["inbound", "outbound"]
     quantity: int
     created_at: datetime
     user_uuid: str
-    product: SKUResponse
+    sku: OrderSKUResponse

@@ -21,6 +21,7 @@ from services import (
     mark_reset_token_used,
     update_user
 )
+from schemas import AuthMeResponse, LoginResponse, MessageResponse
 
 
 load_dotenv()
@@ -113,7 +114,7 @@ def get_current_user(
         )
 
 
-@router.post("/login")
+@router.post("/login", response_model=LoginResponse)
 def login(
     form: OAuth2PasswordRequestForm = Depends()
 ):
@@ -147,7 +148,7 @@ def login(
     }
 
 
-@router.get("/me")
+@router.get("/me", response_model=AuthMeResponse)
 def get_me(
     current_user: dict = Depends(get_current_user)
 ):
@@ -161,7 +162,7 @@ def get_me(
     }
 
 
-@router.post("/forgot-password")
+@router.post("/forgot-password", response_model=MessageResponse)
 def forgot_password(data: ForgotPasswordRequest):
     user = get_user_by_email(data.email)
 
@@ -203,7 +204,7 @@ def forgot_password(data: ForgotPasswordRequest):
     }
 
 
-@router.post("/reset-password")
+@router.post("/reset-password", response_model=MessageResponse)
 def reset_password(data: ResetPasswordRequest):
     try:
         payload = jwt.decode(
@@ -253,7 +254,7 @@ def reset_password(data: ResetPasswordRequest):
     }
 
 
-@router.post("/change-password")
+@router.post("/change-password", response_model=MessageResponse)
 def change_password(
     data: ChangePasswordRequest,
     current_user: dict = Depends(get_current_user)
