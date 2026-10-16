@@ -33,8 +33,8 @@ export default function RegisterPage() {
       await registerUser({
         email,
         password,
-        ...(name ? { name } : {}),
-        ...(phone ? { phone } : {}),
+        name: name.trim(),
+        phone: phone.trim(),
         ...(address ? { address } : {}),
       });
 
@@ -58,7 +58,7 @@ export default function RegisterPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Crear cuenta</h1>
 
       <p className="mt-1 text-sm text-neutral-500">
-        El nombre, telefono y direccion son opcionales.
+        El nombre y el telefono son obligatorios. La direccion es opcional.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -111,6 +111,7 @@ export default function RegisterPage() {
             id="name"
             name="name"
             type="text"
+            required
             value={name}
             onChange={(event) => setName(event.target.value)}
             className={INPUT_CLASS}
@@ -129,7 +130,8 @@ export default function RegisterPage() {
           <input
             id="phone"
             name="phone"
-            type="text"
+            type="tel"
+            required
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
             className={INPUT_CLASS}

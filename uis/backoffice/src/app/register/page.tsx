@@ -43,8 +43,8 @@ export default function RegisterPage() {
       await registerUser({
         email,
         password,
-        ...(name ? { name } : {}),
-        ...(phone ? { phone } : {}),
+        name: name.trim(),
+        phone: phone.trim(),
         ...(address ? { address } : {}),
       });
 
@@ -70,7 +70,7 @@ export default function RegisterPage() {
       </h1>
 
       <p className="authSubtitle">
-        El nombre, telefono y direccion son opcionales.
+        El nombre y el telefono son obligatorios. La direccion es opcional.
       </p>
 
       <form onSubmit={handleSubmit}>
@@ -125,6 +125,7 @@ export default function RegisterPage() {
             id="name"
             name="name"
             type="text"
+            required
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
@@ -144,7 +145,8 @@ export default function RegisterPage() {
           <input
             id="phone"
             name="phone"
-            type="text"
+            type="tel"
+            required
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
           />

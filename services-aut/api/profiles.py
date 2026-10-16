@@ -1,7 +1,8 @@
 from typing import Optional
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, StringConstraints
 
 from auth import get_current_user
 from services import (
@@ -9,6 +10,7 @@ from services import (
     get_profile_by_user_id,
     update_profile
 )
+from schemas import MessageResponse, ProfileResponse
 
 
 router = APIRouter(
@@ -20,6 +22,12 @@ router = APIRouter(
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
     phone: Optional[str] = None
+    address: Optional[str] = None
+
+
+class MyProfileUpdate(BaseModel):
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+    phone: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
     address: Optional[str] = None
 
 
@@ -37,7 +45,7 @@ def owner_or_admin(
         )
 
 
-@router.get("/me")
+@router.get("/me", response_model=ProfileResponse)
 def get_my_profile(
     current_user: dict = Depends(get_current_user)
 ):
@@ -54,9 +62,9 @@ def get_my_profile(
     return profile
 
 
-@router.put("/me")
+@router.put("/me", response_model=ProfileResponse)
 def edit_my_profile(
-    data: ProfileUpdate,
+    data: MyProfileUpdate,
     current_user: dict = Depends(get_current_user)
 ):
     changes = data.model_dump(
@@ -69,14 +77,20 @@ def edit_my_profile(
     )
 
 
-@router.get("")
+@router.get("", response_model=list[ProfileResponse])
 def list_profiles(
     current_user: dict = Depends(get_current_user)
 ):
+    if current_user["role"] != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Solo un admin puede listar perfiles"
+        )
+
     return get_all_profiles()
 
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=ProfileResponse)
 def get_profile_by_user(
     user_id: str,
     current_user: dict = Depends(get_current_user)
@@ -97,7 +111,7 @@ def get_profile_by_user(
     return profile
 
 
-@router.patch("/{user_id}")
+@router.patch("/{user_id}", response_model=ProfileResponse)
 def edit_profile_by_user(
     user_id: str,
     data: ProfileUpdate,

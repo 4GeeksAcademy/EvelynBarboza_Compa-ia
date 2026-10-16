@@ -6,6 +6,7 @@ from models import SKU, StockEntry, StockExit
 from schemas import (
     SKUCreate,
     SKUResponse,
+    OrderResponse,
     StockEntryCreate,
     StockEntryResponse,
     StockExitCreate,
@@ -172,7 +173,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/orders")
+@router.get("/orders", response_model=list[OrderResponse])
 def get_orders(
     db: Session = Depends(get_db),
 ):

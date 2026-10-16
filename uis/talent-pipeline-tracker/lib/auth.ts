@@ -23,16 +23,16 @@ export type CurrentUser = {
 };
 
 export type ProfileUpdatePayload = {
-  name?: string;
-  phone?: string;
+  name: string;
+  phone: string;
   address?: string;
 };
 
 export type RegisterPayload = {
   email: string;
   password: string;
-  name?: string;
-  phone?: string;
+  name: string;
+  phone: string;
   address?: string;
 };
 
@@ -126,6 +126,10 @@ function toErrorMessage(data: unknown, status: number): string {
     const detail = (data as { detail?: unknown }).detail;
 
     if (typeof detail === "string") {
+      if (detail.startsWith("Ya existe una cuenta registrada con ese email.")) {
+        return detail;
+      }
+
       return "No se pudo completar la solicitud. Revisa los datos e inténtalo nuevamente.";
     }
 

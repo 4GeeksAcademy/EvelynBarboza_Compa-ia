@@ -19,6 +19,7 @@ from packages.incidents_analysis import (
     analyze_csv_text,
     summary_to_csv,
 )
+from services.api.models import HealthResponse, IncidentAnalysisResponse
 from services.api.routes.suppliers import (
     router as suppliers_router,
 )
@@ -77,7 +78,7 @@ async def handle_unexpected_error(request: Request, exc: Exception):
 LAST_ANALYSIS = None
 
 
-@app.get("/")
+@app.get("/", response_model=HealthResponse)
 def root():
 
     return {
@@ -90,7 +91,8 @@ def root():
 
 
 @app.post(
-    "/api/incidents/analyze"
+    "/api/incidents/analyze",
+    response_model=IncidentAnalysisResponse,
 )
 async def analyze_incidents(
     file: UploadFile = File(...)
@@ -186,7 +188,17 @@ async def analyze_incidents(
 
 
 @app.get(
-    "/api/incidents/results/export"
+    "/api/incidents/results/export",
+    response_class=Response,
+    responses={
+        200: {
+            "content": {
+                "text/csv": {
+                    "schema": {"type": "string", "format": "binary"},
+                },
+            },
+        },
+    },
 )
 def export_results():
 

@@ -46,7 +46,7 @@ describe("backoffice auth client", () => {
     expect(fetchMock.mock.calls[0][1].body).toBe("username=a%40b.com&password=pw");
 
     fetchMock.mockResolvedValueOnce(response(204));
-    await expect(registerUser({ email: "a@b.com", password: "pw" })).resolves.toBeUndefined();
+    await expect(registerUser({ email: "a@b.com", password: "pw", name: "Ana", phone: "123" })).resolves.toBeUndefined();
 
     fetchMock.mockResolvedValueOnce(response(200, { id: "u1" }));
     await expect(getCurrentUser()).resolves.toEqual({ id: "u1" });
@@ -54,7 +54,22 @@ describe("backoffice auth client", () => {
 
     const profile = { id: "p1", user_id: "u1", name: "Ana" };
     fetchMock.mockResolvedValueOnce(response(200, profile));
-    await expect(updateMyProfile({ name: "Ana" })).resolves.toEqual(profile);
+    await expect(updateMyProfile({ name: "Ana", phone: "123" })).resolves.toEqual(profile);
+  });
+
+  it("shows a clear message when the account email already exists", async () => {
+    fetchMock.mockResolvedValueOnce(response(400, {
+      detail: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
+    }));
+
+    await expect(registerUser({
+      email: "a@b.com",
+      password: "pw",
+      name: "Ana",
+      phone: "123",
+    })).rejects.toMatchObject({
+      message: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
+    });
   });
 
   it("reports string and field validation errors as implemented", async () => {
