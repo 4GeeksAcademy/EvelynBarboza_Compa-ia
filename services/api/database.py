@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from tinydb import Query, TinyDB
 
 from packages.shared import validate_status_transition
+from packages.shared.cache import TTLCache
 from services.api.models import Incident, IncidentCreate
 
 
@@ -13,6 +14,7 @@ DB_PATH = DATA_DIR / "suppliers.json"
 TABLE_NAME = "suppliers"
 INCIDENTS_TABLE_NAME = "incidents"
 INCIDENT_IMPORTS_TABLE_NAME = "incident_imports"
+incident_summary_cache = TTLCache(ttl_seconds=30, max_entries=1)
 
 
 def get_db() -> TinyDB:
@@ -223,6 +225,7 @@ def update_incident_status(incident_id: int, new_status: str):
             {"status": validated_status, "updated_at": updated_at},
             doc_ids=[incident_id],
         )
+        incident_summary_cache.clear()
         return Incident.model_validate(
             _serialize_document(table.get(doc_id=incident_id))
         ).model_dump(mode="json")
@@ -243,6 +246,7 @@ def create_incident(payload: dict, created_at: datetime | None = None):
     try:
         table = db.table(INCIDENTS_TABLE_NAME)
         doc_id = table.insert(incident_data)
+        incident_summary_cache.clear()
         incident = Incident.model_validate(
             _serialize_document(table.get(doc_id=doc_id))
         )

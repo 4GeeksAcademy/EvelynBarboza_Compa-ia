@@ -12,6 +12,7 @@ from services.api import database, main
 @pytest.fixture
 def api_client(tmp_path, monkeypatch):
     monkeypatch.setattr(database, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(database, "DB_PATH", tmp_path / "suppliers.json")
     monkeypatch.setattr(main, "LAST_ANALYSIS", None)
     return TestClient(main.app)
 

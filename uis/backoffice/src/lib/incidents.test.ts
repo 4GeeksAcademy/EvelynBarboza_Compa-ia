@@ -147,6 +147,11 @@ describe("incident form", () => {
 
 describe("incident dashboard", () => {
   it("reserves all four summary groups while loading and keeps placeholders after data arrives", async () => {
+    const formatSpy = jest.spyOn(
+      Intl.DateTimeFormat.prototype as { readonly format: unknown },
+      "format",
+      "get",
+    );
     let resolveSummary!: (value: Response) => void;
     fetchMock.mockImplementation((input: RequestInfo | URL) => (
       String(input).includes("/summary")
@@ -161,6 +166,7 @@ describe("incident dashboard", () => {
     expect(summarySection.querySelectorAll("[data-loading='true']")).toHaveLength(4);
     expect(summarySection.querySelectorAll(".summaryPlaceholder div")).toHaveLength(21);
     expect(mounted.container.textContent).toContain("Pedido detenido");
+    expect(formatSpy).toHaveBeenCalledTimes(1);
 
     await act(async () => {
       resolveSummary(response(summary));
@@ -172,7 +178,9 @@ describe("incident dashboard", () => {
     expect(summarySection.querySelectorAll(".summaryPlaceholder[aria-hidden='true']")).toHaveLength(4);
     expect(summarySection.textContent).toContain("1 incidencias registradas");
     expect(summarySection.querySelectorAll("dl:not([aria-hidden]) dd")).toHaveLength(4);
+    expect(formatSpy).toHaveBeenCalledTimes(1);
     await mounted.unmount();
+    formatSpy.mockRestore();
   });
 
   it("keeps the previous summary visible while a successful status update refreshes it", async () => {

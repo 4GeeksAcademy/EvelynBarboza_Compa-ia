@@ -1,5 +1,6 @@
 import logging
 import os
+from time import perf_counter
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,6 +50,23 @@ SQLModel.metadata.create_all(engine)
 app.include_router(inventory_router)
 
 logger = logging.getLogger(__name__)
+timing_logger = logging.getLogger("api.timing")
+
+
+@app.middleware("http")
+async def timing_middleware(request: Request, call_next):
+    started = perf_counter()
+    response = await call_next(request)
+    elapsed_ms = (perf_counter() - started) * 1000
+    timing_logger.info(
+        "%s %s %s %.2fms",
+        request.method,
+        request.scope.get("route").path if request.scope.get("route") else "/unmatched",
+        response.status_code,
+        elapsed_ms,
+    )
+    response.headers["Server-Timing"] = f"app;dur={elapsed_ms:.2f}"
+    return response
 
 
 @app.exception_handler(Exception)

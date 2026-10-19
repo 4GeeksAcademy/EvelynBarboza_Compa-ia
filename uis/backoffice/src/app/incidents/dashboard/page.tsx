@@ -1,4 +1,14 @@
-import IncidentDashboard from "@/components/incidents/IncidentDashboard";
+"use client";
+
+import dynamic from "next/dynamic";
+
+const IncidentDashboard = dynamic(
+  () => import("@/components/incidents/IncidentDashboard"),
+  {
+    ssr: false,
+    loading: () => <div style={{ minHeight: 480 }} role="status">Cargando panel...</div>,
+  },
+);
 
 
 export default function IncidentsDashboardPage() {
