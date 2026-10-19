@@ -21,7 +21,13 @@ from services import (
     mark_reset_token_used,
     update_user
 )
-from schemas import AuthMeResponse, LoginResponse, MessageResponse
+from schemas import (
+    AuthMeResponse,
+    LoginResponse,
+    MessageResponse,
+    ThemePreferenceResponse,
+    ThemePreferenceUpdate,
+)
 
 
 load_dotenv()
@@ -144,7 +150,8 @@ def login(
 
     return {
         "access_token": token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "theme": user.get("theme", "light"),
     }
 
 
@@ -156,10 +163,27 @@ def get_me(
         "id": current_user["id"],
         "email": current_user["email"],
         "role": current_user["role"],
+        "theme": current_user.get("theme", "light"),
         "profile": get_profile_by_user_id(
             current_user["id"]
         )
     }
+
+
+@router.patch(
+    "/me/preferences",
+    response_model=ThemePreferenceResponse,
+)
+def update_my_preferences(
+    data: ThemePreferenceUpdate,
+    current_user: dict = Depends(get_current_user),
+):
+    update_user(
+        current_user["id"],
+        {"theme": data.theme},
+    )
+
+    return {"theme": data.theme}
 
 
 @router.post("/forgot-password", response_model=MessageResponse)

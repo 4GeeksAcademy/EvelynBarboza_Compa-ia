@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #ffffff;
+  --surface-border: #e4e4e7;
 }
 
 @theme inline {
@@ -12,15 +17,152 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #111923;
+  --foreground: #e8edf4;
+  --surface: #1b2633;
+  --surface-border: #354354;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.brandTrack {
+  color: #203f91;
+}
+
+.brandFlow {
+  color: #4085f6;
+}
+
+.brandDot {
+  margin-left: 2px;
+  color: #08b6c8;
+}
+
+.themeToggle {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--surface-border);
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.themeToggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--surface-border);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.navContent {
+  display: flex;
+  width: min(1400px, 92%);
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.navLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 28px;
+  font-size: 14px;
+}
+
+.navLinks a,
+.navLogout {
+  opacity: 0.82;
+}
+
+.navLinks a:hover,
+.navLogout:hover {
+  opacity: 1;
+}
+
+.navLogout {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+header:has(.brand) {
+  min-height: 76px;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: var(--surface) !important;
+}
+
+[data-theme="dark"] .bg-zinc-50,
+[data-theme="dark"] .bg-neutral-50 {
+  background-color: #151f2b !important;
+}
+
+[data-theme="dark"] .text-zinc-900,
+[data-theme="dark"] .text-neutral-900,
+[data-theme="dark"] .text-gray-900 {
+  color: var(--foreground) !important;
+}
+
+[data-theme="dark"] .text-zinc-500,
+[data-theme="dark"] .text-neutral-500,
+[data-theme="dark"] .text-gray-500 {
+  color: #a8b4c2 !important;
+}
+
+[data-theme="dark"] .border-zinc-200,
+[data-theme="dark"] .border-neutral-200 {
+  border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .brandTrack {
+  color: #9db3ff;
+}
+
+@media (max-width: 640px) {
+  .navContent {
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    font-size: 30px;
+  }
+
+  .navLinks {
+    gap: 12px 18px;
+  }
 }

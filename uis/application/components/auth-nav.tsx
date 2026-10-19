@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { getToken, logout } from "@/lib/auth";
 import { useState } from "react";
+import { ThemeToggleButton } from "@/components/theme-provider";
 
 
 export default function AuthNav() {
@@ -29,6 +30,8 @@ export default function AuthNav() {
         <Link href="/register" className="navLink">
           Crear cuenta
         </Link>
+
+        <ThemeToggleButton />
       </nav>
     );
   }
@@ -42,6 +45,8 @@ export default function AuthNav() {
       <Link href="/account/profile" className="navLink">
         Mi perfil
       </Link>
+
+      <ThemeToggleButton />
 
       <button
         type="button"

@@ -94,6 +94,7 @@ def register(data: UserCreate):
 
         "is_active": True,
         "role": "user",
+        "theme": "light",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
 

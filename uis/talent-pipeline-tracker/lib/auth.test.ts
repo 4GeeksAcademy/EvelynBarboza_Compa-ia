@@ -10,6 +10,7 @@ import {
   registerUser,
   getCurrentUser,
   updateMyProfile,
+  updateThemePreference,
 } from "./auth";
 
 const fetchMock = jest.fn();
@@ -52,6 +53,21 @@ describe("talent pipeline auth client", () => {
     expect(fetchMock.mock.calls[1][1].body).toBe(JSON.stringify(payload));
   });
 
+  it("caches the account theme from the login response before auth sync", async () => {
+    const payload = window.btoa(JSON.stringify({ sub: "user-theme" }))
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+    fetchMock.mockResolvedValueOnce(response(200, {
+      access_token: `header.${payload}.signature`,
+      theme: "dark",
+    }));
+
+    await login("user@example.com", "secret");
+
+    expect(localStorage.getItem("trackflow:theme:user-theme")).toBe("dark");
+  });
+
   it("gets user data and updates the profile with bearer auth", async () => {
     setToken("jwt");
     fetchMock.mockResolvedValueOnce(response(200, { id: "u1" }));
@@ -75,6 +91,19 @@ describe("talent pipeline auth client", () => {
       phone: "123",
     })).rejects.toMatchObject({
       message: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
+    });
+  });
+
+  it("saves the selected theme for the authenticated account", async () => {
+    setToken("jwt");
+    fetchMock.mockResolvedValueOnce(response(200, { theme: "dark" }));
+
+    await expect(updateThemePreference("dark")).resolves.toBeUndefined();
+
+    expect(fetchMock.mock.calls[0][0]).toBe("/auth-backend/auth/me/preferences");
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({
+      method: "PATCH",
+      body: JSON.stringify({ theme: "dark" }),
     });
   });
 

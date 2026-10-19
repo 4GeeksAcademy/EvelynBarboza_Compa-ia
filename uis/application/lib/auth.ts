@@ -8,6 +8,9 @@ export const LOGIN_ROUTE = "/login";
 export const HOME_ROUTE = "/suppliers";
 
 
+export type ThemeMode = "light" | "dark";
+
+
 export type Profile = {
   id: string;
   user_id: string;
@@ -21,6 +24,7 @@ export type CurrentUser = {
   id: string;
   email: string;
   role: string;
+  theme: ThemeMode;
   profile: Profile | null;
 };
 
@@ -73,12 +77,25 @@ export function getToken(): string | null {
 }
 
 
-export function setToken(token: string): void {
+export function setToken(token: string, theme?: ThemeMode): void {
   if (typeof window === "undefined") {
     return;
   }
 
   window.localStorage.setItem(TOKEN_KEY, token);
+  if (theme) {
+    try {
+      const payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      const paddedPayload = payload.padEnd(Math.ceil(payload.length / 4) * 4, "=");
+      const userId = (JSON.parse(window.atob(paddedPayload)) as { sub?: unknown }).sub;
+      if (typeof userId === "string") {
+        window.localStorage.setItem(`trackflow:theme:${userId}`, theme);
+      }
+    } catch {
+      // The provider will restore the server preference if the token cannot be decoded.
+    }
+  }
+  window.dispatchEvent(new Event("trackflow-auth-change"));
 }
 
 
@@ -88,6 +105,7 @@ export function clearToken(): void {
   }
 
   window.localStorage.removeItem(TOKEN_KEY);
+  window.dispatchEvent(new Event("trackflow-auth-change"));
 }
 
 
@@ -252,7 +270,7 @@ export async function login(
   body.set("username", email);
   body.set("password", password);
 
-  const data = await request<{ access_token: string }>(
+  const data = await request<{ access_token: string; theme?: ThemeMode }>(
     "/auth/login",
     {
       method: "POST",
@@ -264,7 +282,7 @@ export async function login(
     false,
   );
 
-  setToken(data.access_token);
+  setToken(data.access_token, data.theme);
 
   return data.access_token;
 }
@@ -291,6 +309,23 @@ export async function getCurrentUser(): Promise<CurrentUser> {
   return request<CurrentUser>(
     "/auth/me",
     { method: "GET" },
+    true,
+  );
+}
+
+
+export async function updateThemePreference(
+  theme: ThemeMode,
+): Promise<void> {
+  await request(
+    "/auth/me/preferences",
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ theme }),
+    },
     true,
   );
 }
