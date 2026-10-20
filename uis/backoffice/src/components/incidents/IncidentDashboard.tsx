@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   getIncidentSummary,
@@ -123,6 +123,14 @@ export default function IncidentDashboard() {
 
   const [updatingIds, setUpdatingIds] = useState<Set<number>>(new Set());
   const [statusErrors, setStatusErrors] = useState<Record<number, string>>({});
+
+  const rows = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat("es", { dateStyle: "medium" });
+    return incidents.map((incident) => ({
+      incident,
+      formattedDate: formatter.format(new Date(incident.created_at)),
+    }));
+  }, [incidents]);
 
   useEffect(() => {
     let active = true;
@@ -325,7 +333,7 @@ export default function IncidentDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {incidents.map((incident) => {
+                {rows.map(({ incident, formattedDate }) => {
                   const transitions = ALLOWED_TRANSITIONS[incident.status];
                   const isUpdating = updatingIds.has(incident.id);
 
@@ -343,7 +351,7 @@ export default function IncidentDashboard() {
                       <td><span className={styles.status}>{labelFor(incident.status)}</span></td>
                       <td>{labelFor(incident.origin)}</td>
                       <td>{labelFor(incident.branch)}</td>
-                      <td>{new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(incident.created_at))}</td>
+                      <td>{formattedDate}</td>
                       <td>
                         <select
                           aria-label={`Cambiar estado de ${incident.title}`}

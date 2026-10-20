@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlmodel import Session, func, select
+
+from packages.shared.cache import TTLCache
 
 from database import get_db
 from models import SKU, StockEntry, StockExit
@@ -17,6 +19,7 @@ from schemas import (
 from auth import get_current_user
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
+orders_cache = TTLCache(ttl_seconds=15, max_entries=32)
 
 
 def calculate_stock(
@@ -62,6 +65,7 @@ def create_inbound_order(
 
     db.add(order)
     db.commit()
+    orders_cache.clear()
     db.refresh(order)
 
     return StockEntryResponse.model_validate(order)
@@ -97,6 +101,7 @@ def create_outbound_order(
 
     db.add(order)
     db.commit()
+    orders_cache.clear()
     db.refresh(order)
 
     return StockExitResponse.model_validate(order)
@@ -175,8 +180,16 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 
 @router.get("/orders", response_model=list[OrderResponse])
 def get_orders(
+    response: Response,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    response.headers["Cache-Control"] = "private, no-store"
+    key = (db.get_bind(), str(current_user["id"]))
+    return orders_cache.get_or_set(key, lambda: _build_orders(db))
+
+
+def _build_orders(db: Session):
     entry_statement = (
         select(StockEntry, SKU)
         .join(

@@ -116,6 +116,7 @@ def test_my_profile_requires_non_blank_name_and_phone(
 def test_inventory_order_list_matches_consumer_shape(
     client: TestClient,
     monkeypatch,
+    valid_access_token,
 ):
     from sqlalchemy.pool import StaticPool
     from sqlmodel import Session, SQLModel, create_engine
@@ -156,7 +157,10 @@ def test_inventory_order_list_matches_consumer_shape(
             ))
             session.commit()
 
-        response = client.get("/inventory/orders")
+        response = client.get(
+            "/inventory/orders",
+            headers={"Authorization": f"Bearer {valid_access_token}"},
+        )
 
         assert response.status_code == 200
         assert response.json()[0]["movement_type"] == "inbound"

@@ -18,6 +18,7 @@ from packages.shared import (
 from services.api.database import (
 	create_incident,
 	get_incident_by_id,
+	incident_summary_cache,
 	list_incidents,
 	update_incident_status,
 )
@@ -107,6 +108,14 @@ def list_incidents_endpoint(
 
 @router.get("/summary", response_model=IncidentSummary)
 def incidents_summary_endpoint():
+	from services.api import database
+
+	return incident_summary_cache.get_or_set(
+		str(database.DB_PATH), _build_incidents_summary
+	)
+
+
+def _build_incidents_summary():
 	incidents = list_incidents()
 	if not incidents:
 		return {

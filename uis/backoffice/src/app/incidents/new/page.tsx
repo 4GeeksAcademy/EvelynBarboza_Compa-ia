@@ -1,4 +1,14 @@
-import IncidentForm from "@/components/incidents/IncidentForm";
+"use client";
+
+import dynamic from "next/dynamic";
+
+const IncidentForm = dynamic(
+  () => import("@/components/incidents/IncidentForm"),
+  {
+    ssr: false,
+    loading: () => <div style={{ minHeight: 480 }} role="status">Cargando formulario...</div>,
+  },
+);
 
 
 export default function NewIncidentPage() {
