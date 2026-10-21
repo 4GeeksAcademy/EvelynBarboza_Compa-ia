@@ -64,7 +64,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="page authPage">
+    <main className="page authPage authBackground">
       <section className="card">
         <h1 className="title">
           Crear cuenta

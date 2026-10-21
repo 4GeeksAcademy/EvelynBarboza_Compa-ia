@@ -20,15 +20,19 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  color: #242a31;
+  color: #000;
   font-size: 14px;
   font-weight: 700;
 }
 
 .field label span {
-  color: #69727d;
+  color: inherit;
   font-size: 12px;
   font-weight: 500;
+}
+
+:global(html[data-theme="dark"]) .field label {
+  color: #fff;
 }
 
 .field input,
@@ -67,6 +71,10 @@
   border-left: 4px solid #c45b26;
   border-radius: 6px;
   background: #fff8f2;
+}
+
+:global(html[data-theme="dark"]) .branchRequired {
+  background: var(--surface-background);
 }
 
 .branchHint {

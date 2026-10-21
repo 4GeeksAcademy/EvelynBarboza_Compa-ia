@@ -779,6 +779,76 @@ html[data-theme="dark"] .brandTrack {
   color: #9db3ff;
 }
 
+.container {
+  --page-foreground: #1a2530;
+  --surface-border: #d7dde3;
+  --muted-foreground: #63707c;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--page-foreground);
+}
+
+html[data-theme="dark"] .container {
+  --page-foreground: #e8edf4;
+  --surface-border: #354354;
+  --muted-foreground: #a8b4c2;
+}
+
+.container > .hero,
+.container > .pageHeader {
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface-background);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.container .hero h1,
+.container .pageHeader h1 {
+  margin: 8px 0;
+  color: var(--page-foreground);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.container .hero p,
+.container .pageHeader p,
+.container .eyebrow,
+.container .fileArea small,
+.container .metric span,
+.container .satisfactionGrid span {
+  color: var(--muted-foreground);
+}
+
+.container .eyebrow {
+  letter-spacing: 0;
+}
+
+.container .card,
+.container .metric {
+  border-color: var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface-background);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.container .card h2,
+.container .metric strong,
+.container .satisfactionGrid strong {
+  color: var(--page-foreground);
+}
+
+.authBackground::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("https://media.istockphoto.com/id/1652511983/es/vector/gesti%C3%B3n-de-la-cadena-de-suministro-scm-ilustraci%C3%B3n-conceptual.jpg?s=612x612&w=0&k=20&c=kfSVewYYvec6r2s19OCX6sDQ4LGNzPjVtUUCpza2hBc=") center / cover no-repeat;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
 @media (max-width: 750px) {
   .navContent {
     flex-wrap: wrap;

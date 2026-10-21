@@ -6,8 +6,11 @@
 .summarySection,
 .listSection {
   min-width: 0;
-  border-top: 1px solid #d9dee3;
-  padding-top: 20px;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface-background);
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .sectionHeading {
@@ -20,13 +23,13 @@
 
 .sectionHeading h2 {
   margin: 0 0 5px;
-  color: #242a31;
-  font-size: 21px;
+  color: var(--page-foreground);
+  font-size: 24px;
 }
 
 .sectionHeading p {
   margin: 0;
-  color: #65707b;
+  color: var(--muted-foreground);
   font-size: 14px;
 }
 
@@ -38,15 +41,15 @@
 
 .summaryGroup {
   min-width: 0;
-  border: 1px solid #e0e4e8;
-  border-radius: 6px;
-  background: #fff;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface-background);
   padding: 16px;
 }
 
 .summaryGroup h3 {
   margin: 0 0 12px;
-  color: #37414a;
+  color: var(--page-foreground);
   font-size: 14px;
 }
 
@@ -75,7 +78,7 @@
 
 .summaryPlaceholder span {
   border-radius: 3px;
-  background: #e7ebee;
+  background: var(--surface-border);
   color: transparent;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
@@ -91,7 +94,7 @@
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  color: #56616c;
+  color: var(--muted-foreground);
   font-size: 13px;
 }
 
@@ -101,7 +104,7 @@
 
 .summaryList dd {
   margin: 0;
-  color: #202a32;
+  color: var(--page-foreground);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -110,17 +113,17 @@
 .feedback,
 .emptyState {
   margin: 0;
-  color: #626e79;
+  color: var(--muted-foreground);
   font-size: 14px;
 }
 
 .textButton,
 .resetButton {
   min-height: 36px;
-  border: 1px solid #aeb8c1;
-  border-radius: 5px;
-  background: #fff;
-  color: #34414b;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface-background);
+  color: var(--page-foreground);
   padding: 7px 10px;
   font-size: 13px;
   font-weight: 600;
@@ -129,7 +132,7 @@
 
 .textButton:hover,
 .resetButton:hover {
-  background: #f1f4f5;
+  background: var(--surface-border);
 }
 
 .filters {
@@ -139,15 +142,15 @@
   gap: 12px;
   margin-bottom: 18px;
   padding: 14px;
-  border: 1px solid #e0e4e8;
-  border-radius: 6px;
-  background: #f8f9fa;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--surface-background);
 }
 
 .filters label {
   display: grid;
   gap: 6px;
-  color: #45515c;
+  color: var(--page-foreground);
   font-size: 12px;
   font-weight: 700;
 }
@@ -156,10 +159,10 @@
 .table select {
   min-width: 0;
   min-height: 38px;
-  border: 1px solid #b9c1c8;
-  border-radius: 5px;
-  background: #fff;
-  color: #27313a;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface-background);
+  color: var(--page-foreground);
   font: inherit;
   padding: 6px 9px;
 }
@@ -168,7 +171,7 @@
 .table select:focus-visible,
 .textButton:focus-visible,
 .resetButton:focus-visible {
-  outline: 3px solid rgba(34, 102, 88, 0.25);
+  outline: 3px solid rgba(64, 133, 246, 0.25);
   outline-offset: 1px;
 }
 
@@ -186,13 +189,13 @@
 
 .table th,
 .table td {
-  border-bottom: 1px solid #e7eaed;
+  border-bottom: 1px solid var(--surface-border);
   padding: 12px 10px;
   vertical-align: top;
 }
 
 .table thead th {
-  color: #5c6873;
+  color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
@@ -200,7 +203,7 @@
 
 .titleCell {
   min-width: 170px;
-  color: #202a32;
+  color: var(--page-foreground);
   font-weight: 650;
 }
 
@@ -213,8 +216,8 @@
 .status {
   display: inline-block;
   border-radius: 4px;
-  background: #edf2f0;
-  color: #2e594f;
+  background: var(--surface-border);
+  color: var(--page-foreground);
   padding: 4px 7px;
   white-space: nowrap;
 }
@@ -228,7 +231,7 @@
 
 .saving {
   margin-top: 5px;
-  color: #626e79;
+  color: var(--muted-foreground);
   font-size: 11px;
 }
 
@@ -238,7 +241,7 @@
   justify-content: space-between;
   gap: 14px;
   border: 1px solid #e4b7b7;
-  border-radius: 6px;
+  border-radius: 12px;
   background: #fff2f2;
   padding: 14px;
   color: #812626;
@@ -250,7 +253,7 @@
 
 .loadError button {
   min-height: 36px;
-  border-radius: 5px;
+  border-radius: 8px;
   background: #812626;
   padding: 7px 11px;
   font-size: 13px;

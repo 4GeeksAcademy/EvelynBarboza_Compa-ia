@@ -40,7 +40,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="authPage">
+    <main className="authPage authBackground">
       <h1 className="authTitle">
         Iniciar sesion
       </h1>
