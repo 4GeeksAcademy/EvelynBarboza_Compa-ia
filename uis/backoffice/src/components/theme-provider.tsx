@@ -11,7 +11,9 @@ import {
 
 import {
   getCurrentUser,
+  getGuestTheme,
   getToken,
+  setGuestTheme,
   updateThemePreference,
   type ThemeMode,
 } from "@/lib/auth";
@@ -50,7 +52,8 @@ function cacheTheme(userId: string, theme: ThemeMode): void {
 
 function getInitialTheme(): ThemeMode {
   if (typeof window === "undefined") return "light";
-  return getCachedTheme(getUserId(getToken())) ?? "light";
+  const userId = getUserId(getToken());
+  return (userId ? getCachedTheme(userId) : getGuestTheme()) ?? "light";
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -72,7 +75,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (!userId) {
         currentUserId.current = null;
         localChangeVersion.current = 0;
-        setTheme("light");
+        setTheme(getGuestTheme() ?? "light");
         return;
       }
 
@@ -114,7 +117,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const userId = getUserId(getToken());
 
     setTheme(nextTheme);
-    if (!userId) return;
+    if (!userId) {
+      setGuestTheme(nextTheme);
+      return;
+    }
 
     currentUserId.current = userId;
     localChangeVersion.current += 1;

@@ -8,6 +8,7 @@ import Link from "next/link";
 import AuthGuard from "@/components/auth-guard";
 import AuthNav from "@/components/auth-nav";
 import { ThemeProvider } from "@/components/theme-provider";
+import { THEME_INIT_SCRIPT } from "@/lib/auth";
 
 import "./globals.css";
 
@@ -23,6 +24,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <ThemeProvider>
           <header className="topbar">

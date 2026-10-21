@@ -1,7 +1,7 @@
 // El servicio de autenticacion es independiente del API de proveedores.
 const API_BASE = "/auth-backend";
 
-const TOKEN_KEY = "trackflow_token";
+export const TOKEN_KEY = "trackflow_token";
 
 export const LOGIN_ROUTE = "/login";
 
@@ -107,6 +107,33 @@ export function clearToken(): void {
   window.localStorage.removeItem(TOKEN_KEY);
   window.dispatchEvent(new Event("trackflow-auth-change"));
 }
+
+
+export const GUEST_THEME_KEY = "trackflow:theme:guest";
+
+
+export function getGuestTheme(): ThemeMode | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const theme = window.localStorage.getItem(GUEST_THEME_KEY);
+
+  return theme === "dark" || theme === "light" ? theme : null;
+}
+
+
+export function setGuestTheme(theme: ThemeMode): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(GUEST_THEME_KEY, theme);
+}
+
+
+// Runs in <head> before first paint; keep in sync with ThemeProvider's getInitialTheme.
+export const THEME_INIT_SCRIPT = `(function(){try{var s=localStorage,t=s.getItem(${JSON.stringify(TOKEN_KEY)}),m=null;if(t){var p=t.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");p+="===".slice((p.length+3)%4);var u=JSON.parse(atob(p)).sub;if(typeof u==="string")m=s.getItem("trackflow:theme:"+u)}else{m=s.getItem(${JSON.stringify(GUEST_THEME_KEY)})}if(m==="dark"||m==="light")document.documentElement.setAttribute("data-theme",m)}catch(e){}})()`;
 
 
 function goToLogin(): void {
@@ -282,7 +309,31 @@ export async function login(
     false,
   );
 
-  setToken(data.access_token, data.theme);
+  const guestTheme = getGuestTheme();
+  let theme = data.theme;
+
+  if (guestTheme && guestTheme !== data.theme) {
+    try {
+      await request(
+        "/auth/me/preferences",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${data.access_token}`,
+          },
+          body: JSON.stringify({ theme: guestTheme }),
+        },
+        false,
+      );
+      theme = guestTheme;
+    } catch {
+      // Keep the account preference when the guest choice cannot be saved.
+    }
+  }
+
+  window.localStorage.removeItem(GUEST_THEME_KEY);
+  setToken(data.access_token, theme);
 
   return data.access_token;
 }

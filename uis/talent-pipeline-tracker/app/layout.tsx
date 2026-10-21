@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { AuthNav } from "@/components/auth/auth-nav";
 import { ThemeProvider } from "@/components/theme-provider";
+import { THEME_INIT_SCRIPT } from "@/lib/auth";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,6 +32,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <AuthNav />

@@ -839,6 +839,16 @@ html[data-theme="dark"] .container {
   color: var(--page-foreground);
 }
 
+.authBackground::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("https://media.istockphoto.com/id/1652511983/es/vector/gesti%C3%B3n-de-la-cadena-de-suministro-scm-ilustraci%C3%B3n-conceptual.jpg?s=612x612&w=0&k=20&c=kfSVewYYvec6r2s19OCX6sDQ4LGNzPjVtUUCpza2hBc=") center / cover no-repeat;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
 @media (max-width: 750px) {
   .navContent {
     flex-wrap: wrap;
