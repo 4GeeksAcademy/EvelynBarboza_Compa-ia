@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from passlib.hash import bcrypt
 
 import auth
-import services
+import auth_data as services
 
 
 def password_change(current, new):

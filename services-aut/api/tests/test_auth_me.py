@@ -12,7 +12,7 @@ def test_get_me_returns_user_and_profile(client, seed_user, valid_access_token, 
 
 
 def test_get_me_returns_null_profile_for_user_without_profile(client, db, valid_user):
-    from services import users_table
+    from auth_data import users_table
     users_table.insert(valid_user)
     from auth import create_access_token
     valid_access_token = create_access_token(valid_user["id"])
@@ -27,7 +27,7 @@ def test_theme_preference_is_saved_for_user_and_returned_by_auth_me(
     seed_user,
     valid_access_token,
 ):
-    from services import get_user_by_id
+    from auth_data import get_user_by_id
 
     headers = {"Authorization": f"Bearer {valid_access_token}"}
     updated = client.patch(

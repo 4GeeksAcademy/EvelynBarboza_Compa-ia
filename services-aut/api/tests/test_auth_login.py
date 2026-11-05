@@ -6,7 +6,7 @@ from jose import jwt
 from passlib.hash import bcrypt
 
 import auth
-import services
+import auth_data as services
 
 
 def login_form(email, password):
@@ -69,11 +69,11 @@ def test_login_token_contains_user_claims(seed_user, known_password):
     assert payload["exp"]
 
 
-def test_login_currently_allows_inactive_user(seed_inactive_user, known_password):
-    # This is an explicit characterization of current behavior, not a desired policy.
-    result = auth.login(login_form(seed_inactive_user["email"], known_password))
+def test_login_rejects_inactive_user(seed_inactive_user, known_password):
+    with pytest.raises(HTTPException) as error:
+        auth.login(login_form(seed_inactive_user["email"], known_password))
 
-    assert result["token_type"] == "bearer"
+    assert error.value.status_code == 401
 
 
 def test_login_with_corrupt_password_hash_is_not_successful(db):
@@ -85,7 +85,7 @@ def test_login_with_corrupt_password_hash_is_not_successful(db):
         "role": "user",
         "created_at": "2026-01-01T00:00:00+00:00",
     }
-    from services import users_table
+    from auth_data import users_table
     users_table.insert(user)
 
     with pytest.raises(Exception):

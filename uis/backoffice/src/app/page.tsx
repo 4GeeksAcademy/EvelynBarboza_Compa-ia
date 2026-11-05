@@ -32,6 +32,18 @@ export default function Home() {
         >
           Analizar incidencias
         </Link>
+        <Link
+          href="/suppliers"
+          className="button"
+        >
+          Gestionar proveedores
+        </Link>
+        <Link
+          href="/inventory/products"
+          className="button"
+        >
+          Gestionar inventario
+        </Link>
 
       </section>
 

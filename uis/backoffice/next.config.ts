@@ -4,10 +4,16 @@ import type {
 
 
 const nextConfig: NextConfig = {
+  basePath: "/backoffice",
 
   async rewrites() {
 
     return [
+
+      {
+        source: "/backoffice/inventory/:path*",
+        destination: "/inventory/:path*",
+      },
 
       {
         source:
@@ -15,8 +21,7 @@ const nextConfig: NextConfig = {
 
         destination:
           (
-            "http://127.0.0.1:"
-            + "8000/:path*"
+            `${process.env.BACKEND_URL || "http://127.0.0.1:8000"}/:path*`
           ),
       },
 
@@ -26,8 +31,7 @@ const nextConfig: NextConfig = {
 
         destination:
           (
-            "http://127.0.0.1:"
-            + "8001/:path*"
+            `${process.env.BACKEND_URL || "http://127.0.0.1:8000"}/:path*`
           ),
       },
 

@@ -7,7 +7,7 @@ from jose import jwt
 from passlib.hash import bcrypt
 
 import auth
-import services
+import auth_data as services
 
 
 def test_reset_password_updates_password_and_marks_token_used(reset_token_record, seed_user, db, monkeypatch):

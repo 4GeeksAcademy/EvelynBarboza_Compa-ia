@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro de Aplicación | TrackFlow Tech</title>
+    <title>Consulta comercial | TrackFlow Tech</title>
     <meta
       name="description"
       content="Formulario de aplicación de TrackFlow Tech para iniciar diagnóstico logístico y activación de soluciones de última milla y almacenes."
@@ -13,7 +13,7 @@
     <meta name="geo.placename" content="Los Angeles; Zaragoza" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
-    <meta property="og:title" content="Registro de Aplicación | TrackFlow Tech" />
+    <meta property="og:title" content="Consulta comercial | TrackFlow Tech" />
     <meta
       property="og:description"
       content="Aplica al programa TrackFlow Tech en menos de 2 minutos con un formulario accesible y seguro."
@@ -204,8 +204,8 @@
 
         <form id="application-form" novalidate class="mt-6 space-y-8" aria-describedby="form-help">
             <p id="form-help" class="text-xs text-ink/70" data-i18n="formHelp">
-                  Usa un email válido y una contraseña segura con al menos 8 caracteres, una mayúscula y un número.
-                  Teléfono, dirección y consultas son opcionales.
+                  Completa tu nombre y un email de contacto válido. Teléfono, dirección y consultas son opcionales.
+                  Este formulario no crea una cuenta de empleado.
           </p>
 
           <div class="grid gap-8 lg:grid-cols-2">
@@ -227,7 +227,7 @@
                   />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h6m-6 4.5h6m-6 4.5h3" />
                 </svg>
-                <span data-i18n="accessData">Datos de acceso</span>
+                <span data-i18n="accessData">Datos de contacto</span>
               </legend>
               <div class="mt-4 space-y-5">
                 <div>
@@ -235,7 +235,7 @@
                     ><span data-i18n="fullNameLabel">Nombre completo</span> <span class="text-secondary">*</span></label
                   >
                   <p id="fullName-desc" class="mt-1 text-xs text-ink/70" data-i18n="fullNameDesc">
-                    Escribe tu nombre y apellido tal como quieres que aparezca en la cuenta.
+                    Escribe tu nombre y apellido para que podamos contactarte.
                   </p>
                   <input
                     id="fullName"
@@ -245,6 +245,7 @@
                     inputmode="text"
                     pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü' -]+$"
                     minlength="5"
+                    maxlength="200"
                     title="Usa solo letras, espacios, apostrofes o guiones."
                     required
                     aria-required="true"
@@ -265,6 +266,7 @@
                     id="email"
                     name="email"
                     type="email"
+                    maxlength="254"
                     autocomplete="email"
                     required
                     aria-required="true"
@@ -274,45 +276,6 @@
                   <p id="email-error" class="mt-2 text-sm text-red-700" role="alert" aria-live="polite"></p>
                 </div>
 
-                <div>
-                  <label for="password" class="block text-sm font-semibold"
-                        ><span data-i18n="passwordLabel">Contraseña</span> <span class="text-secondary">*</span></label
-                  >
-                      <p id="password-desc" class="mt-1 text-xs text-ink/70" data-i18n="passwordDesc">
-                          Mínimo 8 caracteres, incluyendo al menos una letra mayúscula y un número.
-                  </p>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    aria-required="true"
-                    aria-describedby="password-desc password-error"
-                    class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm outline-none transition focus:border-secondary focus:ring-2 focus:ring-accent/30"
-                  />
-                  <p id="password-error" class="mt-2 text-sm text-red-700" role="alert" aria-live="polite"></p>
-                </div>
-
-                <div>
-                  <label for="confirmPassword" class="block text-sm font-semibold"
-                        ><span data-i18n="confirmPasswordLabel">Confirmar contraseña</span> <span class="text-secondary">*</span></label
-                  >
-                      <p id="confirmPassword-desc" class="mt-1 text-xs text-ink/70" data-i18n="confirmPasswordDesc">
-                          Debe coincidir exactamente con la contraseña anterior.
-                  </p>
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    autocomplete="new-password"
-                    required
-                    aria-required="true"
-                    aria-describedby="confirmPassword-desc confirmPassword-error"
-                    class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm outline-none transition focus:border-secondary focus:ring-2 focus:ring-accent/30"
-                  />
-                  <p id="confirmPassword-error" class="mt-2 text-sm text-red-700" role="alert" aria-live="polite"></p>
-                </div>
               </div>
             </fieldset>
 
@@ -342,6 +305,7 @@
                       <p id="phone-desc" class="mt-1 text-xs text-ink/70" data-i18n="phoneDesc">Opcional. Ideal para coordinar una llamada comercial.</p>
                   <input
                     id="phone"
+                    maxlength="50"
                     name="phone"
                     type="tel"
                     autocomplete="tel"
@@ -359,6 +323,7 @@
                   </p>
                   <input
                     id="address"
+                    maxlength="500"
                     name="address"
                     type="text"
                     autocomplete="street-address"
@@ -375,6 +340,7 @@
                   </p>
                   <textarea
                     id="inquiry"
+                    maxlength="5000"
                     name="inquiry"
                     rows="5"
                     aria-describedby="inquiry-desc"
@@ -392,9 +358,9 @@
               class="w-full rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto"
               data-i18n="submit"
               data-i18n-aria-label="submitAria"
-              aria-label="Enviar formulario de registro"
+              aria-label="Enviar consulta comercial"
             >
-              Enviar registro
+              Enviar consulta
             </button>
             <button
               type="button"
@@ -413,7 +379,7 @@
 
     <footer class="border-t border-primary/10 bg-white" role="contentinfo">
       <div class="mx-auto w-full max-w-3xl px-4 py-5 text-xs text-ink/70 sm:px-6">
-        <span data-i18n="footer">Registro seguro para operaciones logísticas en Estados Unidos y España.</span>
+        <span data-i18n="footer">Consultas comerciales sobre operaciones logísticas en Estados Unidos y España.</span>
       </div>
     </footer>
 
@@ -435,7 +401,7 @@
 
       const translations = {
         es: {
-          title: 'Registro de Aplicación | TrackFlow Tech',
+          title: 'Consulta comercial | TrackFlow Tech',
           description:
             'Formulario de aplicación de TrackFlow Tech para iniciar diagnóstico logístico y activación de soluciones de última milla y almacenes.',
           back: 'Volver',
@@ -447,16 +413,12 @@
           highlight1: 'Integración con operaciones de transporte y almacén',
           highlight2: 'Respuesta comercial personalizada para tu empresa',
           formHelp:
-            'Usa un email válido y una contraseña segura con al menos 8 caracteres, una mayúscula y un número. Teléfono, dirección y consultas son opcionales.',
-          accessData: 'Datos de acceso',
+            'Completa tu nombre y un email de contacto válido. Teléfono, dirección y consultas son opcionales. Este formulario no crea una cuenta de empleado.',
+          accessData: 'Datos de contacto',
           fullNameLabel: 'Nombre completo',
-          fullNameDesc: 'Escribe tu nombre y apellido tal como quieres que aparezca en la cuenta.',
+          fullNameDesc: 'Escribe tu nombre y apellido para que podamos contactarte.',
           emailLabel: 'Correo electrónico',
           emailDesc: 'Ejemplo: nombre@empresa.com. Revisa que no tenga espacios ni errores de dominio.',
-          passwordLabel: 'Contraseña',
-          passwordDesc: 'Mínimo 8 caracteres, incluyendo al menos una letra mayúscula y un número.',
-          confirmPasswordLabel: 'Confirmar contraseña',
-          confirmPasswordDesc: 'Debe coincidir exactamente con la contraseña anterior.',
           optionalData: 'Datos opcionales',
           phoneLabel: 'Teléfono',
           phoneDesc: 'Opcional. Ideal para coordinar una llamada comercial.',
@@ -464,18 +426,18 @@
           addressDesc: 'Opcional. Ubicación de la operación o centro de distribución.',
           inquiryLabel: 'Consultas',
           inquiryDesc: 'Opcional. Cuéntanos brevemente qué necesitas optimizar.',
-          submit: 'Enviar registro',
-          submitAria: 'Enviar formulario de registro',
+          submit: 'Enviar consulta',
+          submitAria: 'Enviar consulta comercial',
           clear: 'Limpiar formulario',
           clearAria: 'Limpiar todos los campos del formulario',
-          footer: 'Registro seguro para operaciones logísticas en Estados Unidos y España.',
+          footer: 'Consultas comerciales sobre operaciones logísticas en Estados Unidos y España.',
           phonePlaceholder: '+54 11 1234 5678',
           addressPlaceholder: 'Av. Siempre Viva 742, CABA',
           inquiryPlaceholder:
             'Ejemplo: Quiero reducir tiempos de entrega en última milla y mejorar trazabilidad.'
         },
         en: {
-          title: 'Application Registration | TrackFlow Tech',
+          title: 'Business inquiry | TrackFlow Tech',
           description:
             'TrackFlow Tech application form to start logistics diagnostics and activate last-mile and warehousing solutions.',
           back: 'Back',
@@ -487,16 +449,12 @@
           highlight1: 'Integration with transportation and warehouse operations',
           highlight2: 'Personalized business response for your company',
           formHelp:
-            'Use a valid email and a strong password with at least 8 characters, one uppercase letter, and one number. Phone, address, and inquiries are optional.',
-          accessData: 'Access details',
+            'Enter your name and a valid contact email. Phone, address, and inquiries are optional. This form does not create an employee account.',
+          accessData: 'Contact details',
           fullNameLabel: 'Full name',
-          fullNameDesc: 'Write your first and last name exactly as you want it to appear in your account.',
+          fullNameDesc: 'Enter your first and last name so we can contact you.',
           emailLabel: 'Email address',
           emailDesc: 'Example: name@company.com. Make sure there are no spaces or domain typos.',
-          passwordLabel: 'Password',
-          passwordDesc: 'At least 8 characters, including one uppercase letter and one number.',
-          confirmPasswordLabel: 'Confirm password',
-          confirmPasswordDesc: 'It must exactly match the previous password.',
           optionalData: 'Optional details',
           phoneLabel: 'Phone',
           phoneDesc: 'Optional. Useful for scheduling a business call.',
@@ -504,11 +462,11 @@
           addressDesc: 'Optional. Operation location or distribution center.',
           inquiryLabel: 'Inquiries',
           inquiryDesc: 'Optional. Briefly tell us what you need to optimize.',
-          submit: 'Submit registration',
-          submitAria: 'Submit registration form',
+          submit: 'Send inquiry',
+          submitAria: 'Send business inquiry',
           clear: 'Clear form',
           clearAria: 'Clear all form fields',
-          footer: 'Secure registration for logistics operations in the United States and Spain.',
+          footer: 'Business inquiries about logistics operations in the United States and Spain.',
           phonePlaceholder: '+1 310 555 0123',
           addressPlaceholder: '742 Evergreen Ave, Los Angeles, CA',
           inquiryPlaceholder:

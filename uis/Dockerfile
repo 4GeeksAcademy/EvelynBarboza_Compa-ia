@@ -2,20 +2,20 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copiamos primero los archivos de dependencias para aprovechar la cache de Docker.
-#COPY website/package*.json ./website/ profe guia
-COPY application/package*.json ./application/
+ARG BACKEND_URL=http://backend:8000
+ENV BACKEND_URL=$BACKEND_URL
+ENV NEXT_TELEMETRY_DISABLED=1
+
 COPY backoffice/package*.json ./backoffice/
 
-# Instalamos las dependencias de cada aplicación por separado.
-#RUN npm install --prefix ./website profe guia
-RUN npm install --prefix ./application
-RUN npm install --prefix ./backoffice
+RUN npm ci --prefix ./backoffice
 
-# Ahora copiamos el resto del código.
 COPY . .
 
-EXPOSE 3000
-EXPOSE 3001
+RUN npm --prefix ./backoffice run build
 
-CMD ["sh", "/app/start.sh"]
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["npm", "--prefix", "/app/backoffice", "run", "start", "--", "--hostname", "0.0.0.0", "--port", "3000"]

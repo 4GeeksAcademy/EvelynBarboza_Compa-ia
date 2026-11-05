@@ -18,7 +18,7 @@ from passlib.hash import bcrypt
 from tinydb import TinyDB
 
 import auth
-import services
+import auth_data as services
 from main import app
 
 
@@ -105,6 +105,20 @@ def seed_inactive_user(db, inactive_user):
 @pytest.fixture
 def valid_access_token(seed_user):
     return auth.create_access_token(seed_user["id"])
+
+
+@pytest.fixture
+def admin_access_token(db, known_password_hash):
+    admin = {
+        "id": "user-admin",
+        "email": "admin@example.com",
+        "hashed_password": known_password_hash,
+        "is_active": True,
+        "role": "admin",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    services.users_table.insert(admin)
+    return auth.create_access_token(admin["id"])
 
 
 @pytest.fixture

@@ -250,7 +250,7 @@ describe("incident dashboard", () => {
       category: "other",
     })).resolves.toEqual([]);
     expect(fetchMock.mock.calls[0][0]).toBe(
-      "/backend/api/incidents?status=open&origin=branch&branch=central&category=other",
+      "/backoffice/backend/api/incidents?status=open&origin=branch&branch=central&category=other",
     );
   });
 

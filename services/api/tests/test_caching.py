@@ -51,6 +51,11 @@ def test_summary_hits_and_invalidates_after_create_and_status_update(tmp_path, m
     database.incident_summary_cache.clear()
     loader = Mock(wraps=incidents.list_incidents)
     monkeypatch.setattr(incidents, "list_incidents", loader)
+    monkeypatch.setitem(
+        main.app.dependency_overrides,
+        main.get_current_user,
+        lambda: {"id": "test-employee"},
+    )
     with TestClient(main.app) as client:
         first = client.get("/api/incidents/summary")
         assert first.json()["total"] == 0

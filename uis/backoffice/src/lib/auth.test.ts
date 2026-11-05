@@ -36,7 +36,7 @@ describe("backoffice auth client", () => {
     expect(getToken()).toBe("backoffice-jwt");
     logout();
     expect(getToken()).toBeNull();
-    expect(window.location.replace).toHaveBeenCalledWith("/login");
+    expect(window.location.replace).toHaveBeenCalledWith("/backoffice/login");
     clearToken();
   });
 
@@ -46,9 +46,12 @@ describe("backoffice auth client", () => {
     expect(getToken()).toBe("jwt");
     expect(fetchMock.mock.calls[0][1].body).toBe("username=a%40b.com&password=pw");
 
+    clearToken();
     fetchMock.mockResolvedValueOnce(response(204));
     await expect(registerUser({ email: "a@b.com", password: "pw", name: "Ana", phone: "123" })).resolves.toBeUndefined();
+    expect(fetchMock.mock.calls[1][1].headers.Authorization).toBeUndefined();
 
+    setToken("jwt");
     fetchMock.mockResolvedValueOnce(response(200, { id: "u1" }));
     await expect(getCurrentUser()).resolves.toEqual({ id: "u1" });
     expect(fetchMock.mock.calls[2][1].headers.Authorization).toBe("Bearer jwt");
@@ -74,6 +77,7 @@ describe("backoffice auth client", () => {
   });
 
   it("shows a clear message when the account email already exists", async () => {
+    setToken("admin-jwt");
     fetchMock.mockResolvedValueOnce(response(400, {
       detail: "Ya existe una cuenta registrada con ese email. Inicia sesión o utiliza otro email.",
     }));
@@ -94,7 +98,7 @@ describe("backoffice auth client", () => {
 
     await expect(updateThemePreference("dark")).resolves.toBeUndefined();
 
-    expect(fetchMock.mock.calls[0][0]).toBe("/auth-backend/auth/me/preferences");
+    expect(fetchMock.mock.calls[0][0]).toBe("/backoffice/auth-backend/auth/me/preferences");
     expect(fetchMock.mock.calls[0][1]).toMatchObject({
       method: "PATCH",
       body: JSON.stringify({ theme: "dark" }),
@@ -130,7 +134,7 @@ describe("backoffice auth client", () => {
     fetchMock.mockResolvedValueOnce(response(401));
     await expect(getCurrentUser()).rejects.toMatchObject({ status: 401, message: "Sesion expirada." });
     expect(getToken()).toBeNull();
-    expect(window.location.replace).toHaveBeenCalledWith("/login");
+    expect(window.location.replace).toHaveBeenCalledWith("/backoffice/login");
     expect(new ApiError("x", 400).name).toBe("ApiError");
   });
 });

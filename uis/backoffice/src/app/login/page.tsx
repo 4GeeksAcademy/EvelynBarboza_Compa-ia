@@ -80,6 +80,12 @@ export default function LoginPage() {
           />
         </div>
 
+        <p className="authFooter">
+          <Link href="/forgot-password" className="authLink">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </p>
+
         {error ? (
           <div className="authError">
             <span>{error}</span>

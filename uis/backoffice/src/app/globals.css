@@ -858,3 +858,115 @@ html[data-theme="dark"] .container {
     font-size: 30px;
   }
 }
+
+.page {
+  width: min(1240px, 94%);
+  margin: 28px auto 56px;
+}
+
+.page .card {
+  background: var(--surface-background, #fff);
+  border: 1px solid var(--surface-border, #d7dde3);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.page .title {
+  margin: 0;
+  font-size: 28px;
+}
+
+.page .subtitle,
+.page .muted {
+  color: var(--muted-foreground, #63707c);
+}
+
+.page .controlsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.page .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page .field label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.page .field input,
+.page .field select,
+.page .field textarea {
+  border: 1px solid var(--surface-border, #c4cdd6);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.page .categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.page .checkboxItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page .feedback {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.page .feedbackError {
+  color: #7b1d1d;
+  background: #fce8e8;
+}
+
+.page .feedbackSuccess {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.page .tableWrap {
+  overflow-x: auto;
+}
+
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.page th,
+.page td {
+  padding: 10px;
+  border-bottom: 1px solid var(--surface-border, #d7dde3);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.page .inlineEdit,
+.page .actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.page .buttonDanger {
+  background: #9a2f2f;
+  color: #fff;
+}
+
+.page .buttonWarn {
+  background: #7f5b15;
+  color: #fff;
+}

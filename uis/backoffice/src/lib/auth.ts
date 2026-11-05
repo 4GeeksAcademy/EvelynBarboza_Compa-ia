@@ -1,10 +1,12 @@
-// El servicio de autenticacion es independiente del API de incidencias.
-const API_BASE = "/auth-backend";
+// Both proxy paths target the unified backoffice API.
+const API_BASE = "/backoffice/auth-backend";
 
 export const TOKEN_STORAGE_KEY = "backoffice_token";
 
 export const LOGIN_PATH = "/login";
-export const LOGIN_ROUTE = LOGIN_PATH;
+export const LOGIN_ROUTE = "/backoffice/login";
+
+export const PUBLIC_AUTH_ROUTES = [LOGIN_PATH, "/register", "/forgot-password", "/reset-password"];
 
 export const HOME_ROUTE = "/";
 
@@ -147,7 +149,7 @@ function goToLogin(): void {
     return;
   }
 
-  window.location.replace(LOGIN_PATH);
+  window.location.replace(LOGIN_ROUTE);
 }
 
 
@@ -189,6 +191,10 @@ function readFieldErrors(
 
 
 function toErrorMessage(data: unknown, status: number): string {
+  if (status === 502 || status === 503 || status === 504) {
+    return "El backend no está disponible. Comprueba que esté iniciado y conectado a la base de datos.";
+  }
+
   if (
     typeof data === "object"
     && data !== null
@@ -395,6 +401,63 @@ export async function updateMyProfile(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(changes),
+    },
+    true,
+  );
+}
+
+
+export async function forgotPassword(email: string): Promise<void> {
+  await request(
+    "/auth/forgot-password",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    },
+    false,
+  );
+}
+
+
+export async function resetPassword(
+  token: string,
+  newPassword: string,
+): Promise<void> {
+  await request(
+    "/auth/reset-password",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+        new_password: newPassword,
+      }),
+    },
+    false,
+  );
+}
+
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+): Promise<void> {
+  await request(
+    "/auth/change-password",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+      }),
     },
     true,
   );

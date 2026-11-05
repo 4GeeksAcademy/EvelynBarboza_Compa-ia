@@ -7,12 +7,14 @@ ENV PYTHONUNBUFFERED=1
 
 RUN pip install --no-cache-dir uv
 
-COPY api/requirements.txt ./requirements.txt
+COPY services/api/requirements.txt ./requirements.txt
 
 RUN uv pip install --system -r requirements.txt
 
-COPY api/ .
+COPY services/api ./services/api
+COPY services-aut/api ./services-aut/api
+COPY packages ./packages
 
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "services.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

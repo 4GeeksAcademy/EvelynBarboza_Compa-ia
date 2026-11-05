@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 import auth
-import services
+import auth_data as services
 from main import app
 
 
@@ -11,9 +11,11 @@ def test_registration_and_auth_me_never_expose_password_hash(
     db,
     valid_user,
     profile,
+    admin_access_token,
 ):
     registration = client.post(
         "/users",
+        headers={"Authorization": f"Bearer {admin_access_token}"},
         json={
             "email": "new@example.com",
             "password": "Password-123",

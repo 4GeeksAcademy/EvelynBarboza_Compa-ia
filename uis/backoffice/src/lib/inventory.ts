@@ -1,5 +1,5 @@
 // lib/inventory.ts
-import { getAuthToken } from "@/lib/auth";
+import { getAuthToken, logout } from "@/lib/auth";
 import type {
   SKU,
   StockEntryCreate,
@@ -25,13 +25,7 @@ export class InventoryApiError extends Error {
 }
 
 function getApiBase(): string {
-  const value = process.env.NEXT_PUBLIC_INVENTORY_API_URL;
-
-  if (!value) {
-    throw new Error("Falta NEXT_PUBLIC_INVENTORY_API_URL en .env.local");
-  }
-
-  return value.replace(/\/$/, "");
+  return "/backoffice/backend";
 }
 
 function extractMessage(body: FastApiError | null, fallback: string): string {
@@ -70,6 +64,11 @@ async function inventoryFetch<T>(
     cache: "no-store",
     headers,
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new InventoryApiError(401, "Sesion expirada.");
+  }
 
   if (!response.ok) {
     let body: FastApiError | null = null;

@@ -45,7 +45,7 @@ describe("theme continuity across login", () => {
 
     await login("a@b.com", "pw");
 
-    expect(fetchMock.mock.calls[1][0]).toBe("/auth-backend/auth/me/preferences");
+    expect(fetchMock.mock.calls[1][0]).toBe("/backoffice/auth-backend/auth/me/preferences");
     expect(fetchMock.mock.calls[1][1]).toMatchObject({
       method: "PATCH",
       body: JSON.stringify({ theme: "dark" }),

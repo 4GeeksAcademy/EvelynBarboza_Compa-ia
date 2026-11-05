@@ -4,7 +4,7 @@ import pytest
 from jose import jwt
 
 import auth
-import services
+import auth_data as services
 
 
 def test_forgot_password_creates_reset_token_and_sends_email(client, seed_user, db, monkeypatch):

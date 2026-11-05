@@ -96,13 +96,13 @@ function ProductsContent() {
                     <div className={styles.actions}>
                       <Link
                         className={styles.actionLink}
-                        href={`/backoffice/inventory/orders/inbound?productId=${product.id}`}
+                        href={`/inventory/orders/inbound?productId=${product.id}`}
                       >
                         Entrada
                       </Link>
                       <Link
                         className={styles.actionLink}
-                        href={`/backoffice/inventory/orders/outbound?productId=${product.id}`}
+                        href={`/inventory/orders/outbound?productId=${product.id}`}
                       >
                         Salida
                       </Link>

@@ -1,7 +1,11 @@
 import logging
+import sys
+from contextlib import asynccontextmanager
 from time import perf_counter
+from pathlib import Path
 
 from fastapi import (
+    Depends,
     FastAPI,
     File,
     HTTPException,
@@ -15,6 +19,11 @@ from fastapi.responses import (
     Response,
 )
 
+AUTH_API_DIR = Path(__file__).resolve().parents[2] / "services-aut" / "api"
+if not AUTH_API_DIR.is_dir():
+    raise RuntimeError(f"No se encontró el backend de autenticación: {AUTH_API_DIR}")
+if str(AUTH_API_DIR) not in sys.path:
+    sys.path.append(str(AUTH_API_DIR))
 
 from packages.incidents_analysis import (
     analyze_csv_text,
@@ -25,21 +34,44 @@ from services.api.routes.suppliers import (
     router as suppliers_router,
 )
 from services.api.routes.incidents import (
-	router as incidents_router,
+    router as incidents_router,
 )
+from services.api.routes.commercial import router as commercial_router
+from auth import get_current_user, router as auth_router
+from profiles import router as profiles_router
+from routers.inventory import router as inventory_router
+from users import router as users_router
+from database import engine
+from sqlmodel import SQLModel
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    SQLModel.metadata.create_all(engine)
+    yield
 
 
 app = FastAPI(
     title=(
-        "Trackflow Incidents API"
+        "TrackFlow Backoffice API"
     ),
     version="1.0.0",
+    lifespan=lifespan,
 )
 
+app.include_router(auth_router)
+app.include_router(commercial_router)
+app.include_router(users_router)
+app.include_router(profiles_router)
 app.include_router(
-    suppliers_router
+    suppliers_router,
+    dependencies=[Depends(get_current_user)],
 )
-app.include_router(incidents_router)
+app.include_router(
+    incidents_router,
+    dependencies=[Depends(get_current_user)],
+)
+app.include_router(inventory_router)
 
 logger = logging.getLogger(__name__)
 timing_logger = logging.getLogger("api.timing")
@@ -113,7 +145,8 @@ def root():
     response_model=IncidentAnalysisResponse,
 )
 async def analyze_incidents(
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
 ):
 
     global LAST_ANALYSIS
@@ -208,6 +241,7 @@ async def analyze_incidents(
 @app.get(
     "/api/incidents/results/export",
     response_class=Response,
+    dependencies=[Depends(get_current_user)],
     responses={
         200: {
             "content": {

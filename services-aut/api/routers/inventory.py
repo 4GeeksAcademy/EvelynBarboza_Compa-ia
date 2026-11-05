@@ -18,7 +18,11 @@ from schemas import (
 # Reutiliza la autenticación existente en services-aut/api/auth.py.
 from auth import get_current_user
 
-router = APIRouter(prefix="/inventory", tags=["inventory"])
+router = APIRouter(
+    prefix="/inventory",
+    tags=["inventory"],
+    dependencies=[Depends(get_current_user)],
+)
 orders_cache = TTLCache(ttl_seconds=15, max_entries=32)
 
 

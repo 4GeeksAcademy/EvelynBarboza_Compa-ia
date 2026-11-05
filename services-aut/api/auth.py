@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 
 from email_service import send_reset_email
-from services import (
+from auth_data import (
     create_reset_token,
     get_profile_by_user_id,
     get_reset_token,
@@ -105,7 +105,7 @@ def get_current_user(
 
         user = get_user_by_id(user_id)
 
-        if not user:
+        if not user or not user.get("is_active", True):
             raise HTTPException(
                 status_code=401,
                 detail="Usuario no válido"
@@ -129,7 +129,7 @@ def login(
 
     user = get_user_by_email(form.username)
 
-    if not user:
+    if not user or not user.get("is_active", True):
         raise HTTPException(
             status_code=401,
             detail="Email o contraseña incorrectos"
