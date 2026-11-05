@@ -1,63 +1,88 @@
 services:
-  interfaces:
+  public:
+    build:
+      context: .
+      dockerfile: uis/public/Dockerfile
+    ports:
+      - "127.0.0.1:3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - company_network
+
+  backoffice:
     build:
       context: ./uis
       dockerfile: Dockerfile
-
+      args:
+        BACKEND_URL: http://backend:8000
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "127.0.0.1:3001:3000"
 
     env_file:
       - .env
-
-    volumes:
-      - ./uis:/app
-      - website_node_modules:/app/application/node_modules
-      #- website_node_modules:/app/website/node_modules el del profe lo cambie por el de arriba
-      - backoffice_node_modules:/app/backoffice/node_modules
-
-    command: ["sh", "/app/start.sh"]
+    environment:
+      BACKEND_URL: http://backend:8000
 
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/backoffice/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
     networks:
       - company_network
 
   backend:
     build:
-      context: ./services
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/Dockerfile
 
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
 
     env_file:
       - .env
+    environment:
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3001/backoffice}
 
     volumes:
-      - ./services:/app
+      - ./services:/app/services
+      - ./services-aut/api:/app/services-aut/api
+      - ./packages:/app/packages
 
     command:
       [
         "uvicorn",
-        "main:app",
+        "services.api.main:app",
         "--host",
         "0.0.0.0",
         "--port",
-        "8000",
-        "--reload"
+        "8000"
       ]
 
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=4)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - company_network
 
 networks:
   company_network:
-    name: company_network
     driver: bridge
-
-volumes:
-  website_node_modules:
-  backoffice_node_modules:

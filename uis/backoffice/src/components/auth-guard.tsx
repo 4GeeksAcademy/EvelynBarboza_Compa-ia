@@ -4,13 +4,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import { LOGIN_PATH, getAuthToken } from "@/lib/auth";
-
-
-const PUBLIC_ROUTES = [
-  "/login",
-  "/register",
-];
+import { LOGIN_PATH, PUBLIC_AUTH_ROUTES, getAuthToken } from "@/lib/auth";
 
 
 export default function AuthGuard({
@@ -19,7 +13,7 @@ export default function AuthGuard({
   const pathname = usePathname();
   const router = useRouter();
 
-  const isPublic = PUBLIC_ROUTES.includes(pathname);
+  const isPublic = PUBLIC_AUTH_ROUTES.includes(pathname);
 
   useEffect(() => {
     if (!isPublic && !getAuthToken()) {

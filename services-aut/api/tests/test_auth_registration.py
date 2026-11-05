@@ -2,7 +2,7 @@ import pytest
 from fastapi import HTTPException
 from passlib.hash import bcrypt
 
-import services
+import auth_data as services
 import users
 
 
@@ -29,13 +29,15 @@ def test_register_characterizes_current_email_validation(db, email, should_creat
     assert (result["user"]["email"] == email) is should_create
 
 
-def test_register_creates_user_and_profile(db):
-    result = users.register(users.UserCreate(
-        email="new@example.com",
-        password="Password-123",
-        name="Nombre",
-        phone="123",
-    ))
+def test_register_creates_user_and_profile(client, known_password):
+    response = client.post("/users", json={
+        "email": "new@example.com",
+        "password": known_password,
+        "name": "Nombre",
+        "phone": "123",
+    })
+    assert response.status_code == 200
+    result = response.json()
 
     assert result["user"]["email"] == "new@example.com"
     assert result["user"]["role"] == "user"
@@ -114,14 +116,18 @@ def test_register_currently_hashes_empty_password(db):
 
 
 @pytest.mark.parametrize("payload", [{"password": "Password-123"}, {"email": "new@example.com"}, {}])
-def test_register_rejects_missing_required_fields(client, payload):
-    response = client.post("/users", json=payload)
+def test_register_rejects_missing_required_fields(client, payload, admin_access_token):
+    response = client.post(
+        "/users",
+        json=payload,
+        headers={"Authorization": f"Bearer {admin_access_token}"},
+    )
 
     assert response.status_code == 422
 
 
 @pytest.mark.parametrize("field", ["name", "phone"])
-def test_register_requires_name_and_phone(client, field):
+def test_register_requires_name_and_phone(client, field, admin_access_token):
     payload = {
         "email": "required@example.com",
         "password": "Password-123",
@@ -130,14 +136,22 @@ def test_register_requires_name_and_phone(client, field):
     }
     payload.pop(field)
 
-    response = client.post("/users", json=payload)
+    response = client.post(
+        "/users",
+        json=payload,
+        headers={"Authorization": f"Bearer {admin_access_token}"},
+    )
 
     assert response.status_code == 422
     assert field in {error["loc"][-1] for error in response.json()["detail"]}
 
 
 @pytest.mark.parametrize("field", ["name", "phone"])
-def test_register_rejects_blank_required_contact_fields(client, field):
+def test_register_rejects_blank_required_contact_fields(
+    client,
+    field,
+    admin_access_token,
+):
     payload = {
         "email": "required@example.com",
         "password": "Password-123",
@@ -146,22 +160,37 @@ def test_register_rejects_blank_required_contact_fields(client, field):
     }
     payload[field] = "   "
 
-    response = client.post("/users", json=payload)
+    response = client.post(
+        "/users",
+        json=payload,
+        headers={"Authorization": f"Bearer {admin_access_token}"},
+    )
 
     assert response.status_code == 422
     assert field in {error["loc"][-1] for error in response.json()["detail"]}
 
 
-def test_duplicate_registration_returns_clear_message(client, valid_user):
+def test_duplicate_registration_returns_clear_message(
+    client,
+    valid_user,
+    admin_access_token,
+):
     services.users_table.insert(valid_user)
 
-    response = client.post("/users", json={
+    payload = {
         "email": valid_user["email"],
         "password": "Password-123",
         "name": "Nombre",
         "phone": "123",
-    })
+    }
+    anonymous_response = client.post("/users", json=payload)
+    response = client.post(
+        "/users",
+        json=payload,
+        headers={"Authorization": f"Bearer {admin_access_token}"},
+    )
 
+    assert anonymous_response.status_code == 400
     assert response.status_code == 400
     assert response.json()["detail"] == (
         "Ya existe una cuenta registrada con ese email. "

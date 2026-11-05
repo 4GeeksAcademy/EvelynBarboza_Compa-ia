@@ -1,3 +1,5 @@
+import { getAuthToken, logout } from "@/lib/auth";
+
 export const INCIDENT_CATEGORIES = [
   "lost_parcel",
   "delivery_failure",
@@ -83,19 +85,25 @@ async function incidentsFetch<T>(
   fallback = "No se pudo completar la operación. Intenta nuevamente.",
 ): Promise<T> {
   let response: Response;
+  const headers = new Headers(init.headers);
+  headers.set("Accept", "application/json");
+  headers.set("Content-Type", "application/json");
+  const token = getAuthToken();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
 
   try {
-    response = await fetch(`/backend/api/incidents${path}`, {
+    response = await fetch(`/backoffice/backend/api/incidents${path}`, {
       ...init,
       cache: "no-store",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        ...init.headers,
-      },
+      headers,
     });
   } catch {
     throw new IncidentApiError("No se pudo conectar con el servidor.");
+  }
+
+  if (response.status === 401) {
+    logout();
+    throw new IncidentApiError("Sesion expirada.");
   }
 
   let data: unknown = null;

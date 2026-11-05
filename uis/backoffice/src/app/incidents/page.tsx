@@ -10,6 +10,7 @@ import type {
   FormEvent
 } from "react";
 
+import { getAuthToken, logout } from "@/lib/auth";
 
 type BreakdownValue = {
 
@@ -154,7 +155,7 @@ export default function IncidentsPage() {
         await fetch(
 
           (
-            "/backend"
+            "/backoffice/backend"
             + "/api/incidents/analyze"
           ),
 
@@ -164,10 +165,18 @@ export default function IncidentsPage() {
 
             body:
               formData,
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
           }
 
         );
 
+
+      if (response.status === 401) {
+        logout();
+        throw new Error("Sesion expirada.");
+      }
 
       let data: unknown = null;
 
@@ -230,12 +239,21 @@ export default function IncidentsPage() {
       const response =
         await fetch(
           (
-            "/backend"
+            "/backoffice/backend"
             + "/api/incidents/"
             + "results/export"
-          )
+          ),
+          {
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          }
         );
 
+      if (response.status === 401) {
+        logout();
+        throw new Error("Sesion expirada.");
+      }
 
       if (!response.ok) {
 

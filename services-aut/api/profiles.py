@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, StringConstraints
 
 from auth import get_current_user
-from services import (
+from auth_data import (
     get_all_profiles,
     get_profile_by_user_id,
     update_profile

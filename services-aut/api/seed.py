@@ -4,7 +4,7 @@ from database import engine
 from models import SKU, StockEntry, StockExit
 
 
-# 1) Creá primero un usuario desde POST /auth/register.
+# 1) Crea primero la cuenta del empleado desde POST /users usando una cuenta admin.
 # 2) Copiá el uuid que devuelve Swagger y pegalo acá.
 USER_UUID = "33e0b8b0-4e94-4d04-a979-9effe2b69aba"
 

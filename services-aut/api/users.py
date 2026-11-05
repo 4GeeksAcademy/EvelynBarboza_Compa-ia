@@ -8,7 +8,7 @@ from passlib.hash import bcrypt
 from pydantic import BaseModel, StringConstraints
 
 from auth import get_current_user
-from services import (
+from auth_data import (
     create_user,
     delete_user,
     get_all_users,
@@ -71,9 +71,11 @@ def owner_or_admin(
         )
 
 
-@router.post("", response_model=RegistrationResponse)
+@router.post(
+    "",
+    response_model=RegistrationResponse,
+)
 def register(data: UserCreate):
-
     if get_user_by_email(data.email):
         raise HTTPException(
             status_code=400,

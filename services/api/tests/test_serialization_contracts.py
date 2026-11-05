@@ -14,7 +14,9 @@ def api_client(tmp_path, monkeypatch):
     monkeypatch.setattr(database, "DATA_DIR", tmp_path)
     monkeypatch.setattr(database, "DB_PATH", tmp_path / "suppliers.json")
     monkeypatch.setattr(main, "LAST_ANALYSIS", None)
-    return TestClient(main.app)
+    main.app.dependency_overrides[main.get_current_user] = lambda: {"id": "test-employee"}
+    yield TestClient(main.app)
+    main.app.dependency_overrides.pop(main.get_current_user)
 
 
 def test_root_and_incident_analysis_return_explicit_contracts(api_client):

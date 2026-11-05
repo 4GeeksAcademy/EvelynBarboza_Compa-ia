@@ -21,11 +21,23 @@ Este repositorio es la **plantilla de inicio** para los proyectos transversales.
 
 ## Estado actual de la plantilla
 
-Actualmente el repositorio ofrece una **estructura base de carpetas y documentación**, pero todavía no incluye aplicaciones ejecutables ni scripts globales en la raíz.
+El proyecto ensambla una web pública estática, un frontend de backoffice y una API
+FastAPI unificada. Pipeline queda pendiente de una integración posterior.
 
-- `CONTEXT.md` es un placeholder y debe sustituirse por el contexto de la empresa asignada.
-- No existe todavía un `AGENTS.md` en la raíz.
-- Existe metadata del paquete compartido en `packages/shared/package.json` (`@repo/shared-types`), pero aún no hay runner de workspace en raíz.
+```bash
+docker compose up --build
+```
+
+La web pública es `http://localhost:3000/`; el backoffice se abre por separado en
+`http://localhost:3001/backoffice/login`. No hay navegación entre ambas aplicaciones.
+La web pública sigue siendo HTML; su migración a React/Next está pendiente.
+El formulario comercial no crea cuentas y conserva su endpoint en la API.
+El login del backoffice permite registrarse sin sesión; las cuentas tienen rol
+`user` y el registro no verifica su pertenencia a la empresa. Proveedores, inventario e
+incidencias requieren autenticación también en la API.
+
+La configuración, los datos persistentes y el alta del primer administrador se
+describen en [la documentación del backoffice](./uis/backoffice/README.md).
 
 ---
 
