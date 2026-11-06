@@ -21,16 +21,17 @@ Este repositorio es la **plantilla de inicio** para los proyectos transversales.
 
 ## Estado actual de la plantilla
 
-El proyecto ensambla una web pública estática, un frontend de backoffice y una API
-FastAPI unificada. Pipeline queda pendiente de una integración posterior.
+El proyecto ensambla dos frontends Next.js independientes (`uis/website` y
+`uis/backoffice`) y una API FastAPI unificada. Pipeline queda pendiente de una
+integración posterior.
 
 ```bash
 docker compose up --build
 ```
 
-La web pública es `http://localhost:3000/`; el backoffice se abre por separado en
-`http://localhost:3001/backoffice/login`. No hay navegación entre ambas aplicaciones.
-La web pública sigue siendo HTML; su migración a React/Next está pendiente.
+La web pública Next.js es `http://localhost:3000/`; el backoffice se abre por
+separado en `http://localhost:3001/backoffice/login`. No hay navegación entre
+ambas aplicaciones.
 El formulario comercial no crea cuentas y conserva su endpoint en la API.
 El login del backoffice permite registrarse sin sesión; las cuentas tienen rol
 `user` y el registro no verifica su pertenencia a la empresa. Proveedores, inventario e

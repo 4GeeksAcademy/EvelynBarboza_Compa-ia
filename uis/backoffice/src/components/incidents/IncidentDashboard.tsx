@@ -354,7 +354,9 @@ export default function IncidentDashboard() {
                       <td>{formattedDate}</td>
                       <td>
                         <select
+                          className={styles.statusSelect}
                           aria-label={`Cambiar estado de ${incident.title}`}
+                          data-status={incident.status}
                           value={incident.status}
                           disabled={isUpdating || transitions.length === 0}
                           onChange={(event) => {

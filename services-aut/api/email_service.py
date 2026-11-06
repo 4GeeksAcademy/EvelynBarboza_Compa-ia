@@ -3,6 +3,11 @@ import os
 import urllib.request
 from html import escape
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 RESEND_FROM_EMAIL = os.getenv(
@@ -12,6 +17,9 @@ RESEND_FROM_EMAIL = os.getenv(
 
 
 def send_reset_email(to_email: str, reset_link: str) -> None:
+    if not RESEND_API_KEY:
+        raise OSError("RESEND_API_KEY no esta configurada")
+
     html = f"""
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
         <h2>Restablecer contrasena</h2>

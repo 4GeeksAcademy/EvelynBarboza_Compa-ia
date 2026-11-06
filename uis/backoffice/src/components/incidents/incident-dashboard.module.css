@@ -167,6 +167,35 @@
   padding: 6px 9px;
 }
 
+.statusSelect[data-status="discarded"] {
+  border-color: rgba(100, 116, 139, 0.7);
+  background-color: rgba(100, 116, 139, 0.18);
+}
+
+.statusSelect[data-status="resolved"] {
+  border-color: rgba(22, 101, 52, 0.7);
+  background-color: rgba(22, 101, 52, 0.16);
+}
+
+.statusSelect[data-status="in_progress"] {
+  border-color: rgba(161, 98, 7, 0.72);
+  background-color: rgba(161, 98, 7, 0.18);
+}
+
+.statusSelect[data-status="open"] {
+  border-color: rgba(194, 65, 12, 0.72);
+  background-color: rgba(194, 65, 12, 0.16);
+}
+
+:global(html[data-theme="dark"]) .statusSelect {
+  color-scheme: dark;
+}
+
+:global(html[data-theme="dark"]) .statusSelect option {
+  background-color: #1b2633;
+  color: #e8edf4;
+}
+
 .filters select:focus-visible,
 .table select:focus-visible,
 .textButton:focus-visible,

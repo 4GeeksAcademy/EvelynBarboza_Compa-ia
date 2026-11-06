@@ -309,80 +309,6 @@ export default function SuppliersPage() {
 
       <section className="card">
         <h2>
-          Filtros
-        </h2>
-
-        <div className="controlsRow">
-          <div className="field">
-            <label htmlFor="filterCountry">
-              Pais
-            </label>
-
-            <select
-              id="filterCountry"
-              value={filterCountry}
-              onChange={(event) => {
-                setFilterCountry(
-                  event.target.value as "" | SupplierCountry,
-                );
-              }}
-              disabled={loading || Boolean(mutationKey)}
-            >
-              <option value="">
-                Todos
-              </option>
-              {COUNTRIES.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="field">
-            <label htmlFor="filterCategory">
-              Categoria
-            </label>
-
-            <select
-              id="filterCategory"
-              value={filterCategory}
-              onChange={(event) => {
-                setFilterCategory(
-                  event.target.value as "" | SupplierCategory,
-                );
-              }}
-              disabled={loading || Boolean(mutationKey)}
-            >
-              <option value="">
-                Todas
-              </option>
-              {CATEGORIES.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="actions">
-          <button
-            type="button"
-            className="button buttonSecondary"
-            onClick={() => {
-              setFilterCountry("");
-              setFilterCategory("");
-            }}
-            disabled={!hasActiveFilters || loading || Boolean(mutationKey)}
-          >
-            Limpiar filtros
-          </button>
-        </div>
-      </section>
-
-      <section className="card">
-        <h2>
           Alta de proveedor
         </h2>
 
@@ -598,6 +524,80 @@ export default function SuppliersPage() {
 
       <section className="card">
         <h2>
+          Filtros
+        </h2>
+
+        <div className="controlsRow">
+          <div className="field">
+            <label htmlFor="filterCountry">
+              Pais
+            </label>
+
+            <select
+              id="filterCountry"
+              value={filterCountry}
+              onChange={(event) => {
+                setFilterCountry(
+                  event.target.value as "" | SupplierCountry,
+                );
+              }}
+              disabled={loading || Boolean(mutationKey)}
+            >
+              <option value="">
+                Todos
+              </option>
+              {COUNTRIES.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="field">
+            <label htmlFor="filterCategory">
+              Categoria
+            </label>
+
+            <select
+              id="filterCategory"
+              value={filterCategory}
+              onChange={(event) => {
+                setFilterCategory(
+                  event.target.value as "" | SupplierCategory,
+                );
+              }}
+              disabled={loading || Boolean(mutationKey)}
+            >
+              <option value="">
+                Todas
+              </option>
+              {CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="actions">
+          <button
+            type="button"
+            className="button buttonSecondary"
+            onClick={() => {
+              setFilterCountry("");
+              setFilterCategory("");
+            }}
+            disabled={!hasActiveFilters || loading || Boolean(mutationKey)}
+          >
+            Limpiar filtros
+          </button>
+        </div>
+      </section>
+
+      <section className="card">
+        <h2>
           Proveedores
         </h2>
 
@@ -611,7 +611,7 @@ export default function SuppliersPage() {
           </p>
         ) : (
           <div className="tableWrap">
-            <table>
+            <table className="supplierTable">
               <thead>
                 <tr>
                   <th>Nombre</th>
@@ -635,10 +635,10 @@ export default function SuppliersPage() {
 
                   return (
                     <tr key={supplier.id}>
-                      <td>{supplier.name}</td>
-                      <td>{supplier.country}</td>
-                      <td>{supplier.categories.join(", ")}</td>
-                      <td>
+                      <td data-label="Nombre">{supplier.name}</td>
+                      <td data-label="Pais">{supplier.country}</td>
+                      <td data-label="Categorias">{supplier.categories.join(", ")}</td>
+                      <td data-label="Tarifa">
                         <div className="inlineEdit">
                           <input
                             type="number"
@@ -655,7 +655,7 @@ export default function SuppliersPage() {
                           />
                           <button
                             type="button"
-                            className="button buttonSecondary"
+                            className="button buttonSecondary supplierUpdateButton"
                             disabled={Boolean(mutationKey)}
                             onClick={() => {
                               void handleRateUpdate(supplier);
@@ -665,8 +665,8 @@ export default function SuppliersPage() {
                           </button>
                         </div>
                       </td>
-                      <td>{supplier.currency}</td>
-                      <td>
+                      <td data-label="Moneda">{supplier.currency}</td>
+                      <td data-label="Estado">
                         <span
                           className={[
                             "statusBadge",
@@ -678,10 +678,10 @@ export default function SuppliersPage() {
                           {supplier.status}
                         </span>
                       </td>
-                      <td>{supplier.service_zone ?? "-"}</td>
-                      <td>{supplier.contact_email ?? "-"}</td>
-                      <td>{formatDate(supplier.updated_at)}</td>
-                      <td>
+                      <td data-label="Zona">{supplier.service_zone ?? "-"}</td>
+                      <td data-label="Email">{supplier.contact_email ?? "-"}</td>
+                      <td data-label="Updated At">{formatDate(supplier.updated_at)}</td>
+                      <td data-label="Acciones">
                         <div className="actions">
                           <button
                             type="button"

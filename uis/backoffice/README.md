@@ -18,12 +18,13 @@ docker compose up --build
 - Login de empleados: `http://localhost:3001/backoffice/login`.
 - API unificada: `http://localhost:8000/docs`.
 
-El sitio público es HTML servido con Nginx, sin enlaces ni proxy al backoffice.
-Su migración a React/Next está pendiente. Ambas interfaces se abren por separado.
+El sitio público es una aplicación Next.js independiente en `uis/website`.
+Ambas interfaces se abren por separado y no tienen enlaces entre sí.
 No se ejecutan `uis/application` ni `uis/talent-pipeline-tracker`.
 El contenedor del backoffice compila y ejecuta Next.js en modo producción; al
 cambiar código hay que reconstruir con `docker compose up --build -d`.
-La web pública espera a la API para su formulario, pero no depende del backoffice.
+La web pública reenvía su formulario comercial al backend y no depende del
+backoffice. Compose construye y ejecuta los dos frontends Next.js por separado.
 El menú no incluye un enlace **Web pública**. **Salir** aparece al final, después
 de **Cambiar contraseña**: elimina la sesión y redirige a su propio login.
 Las sesiones vencidas siguen redirigiendo al login del backoffice.

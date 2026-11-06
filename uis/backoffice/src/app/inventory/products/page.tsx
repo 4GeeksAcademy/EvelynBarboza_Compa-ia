@@ -95,13 +95,13 @@ function ProductsContent() {
                   <td>
                     <div className={styles.actions}>
                       <Link
-                        className={styles.actionLink}
+                        className={`${styles.actionLink} ${styles.actionInbound}`}
                         href={`/inventory/orders/inbound?productId=${product.id}`}
                       >
                         Entrada
                       </Link>
                       <Link
-                        className={styles.actionLink}
+                        className={`${styles.actionLink} ${styles.actionOutbound}`}
                         href={`/inventory/orders/outbound?productId=${product.id}`}
                       >
                         Salida
