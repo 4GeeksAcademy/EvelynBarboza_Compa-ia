@@ -218,9 +218,9 @@ def forgot_password(data: ForgotPasswordRequest):
 
         try:
             send_reset_email(user["email"], reset_link)
-        except OSError:
-            # No se filtra el error de envio: la respuesta siempre es 200.
-            logger.warning("No se pudo enviar un correo de recuperacion")
+        except OSError as error:
+            # No se filtra el error de envio al cliente para no revelar cuentas.
+            logger.warning("No se pudo enviar un correo de recuperacion: %s", error)
 
     # Siempre 200: no revela si el email esta registrado.
     return {

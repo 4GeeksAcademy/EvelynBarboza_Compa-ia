@@ -1,16 +1,20 @@
 services:
-  public:
+  website:
     build:
       context: .
-      dockerfile: uis/public/Dockerfile
+      dockerfile: uis/website/Dockerfile
+      args:
+        BACKEND_URL: http://backend:8000
     ports:
-      - "127.0.0.1:3000:80"
+      - "127.0.0.1:3000:3000"
+    environment:
+      BACKEND_URL: http://backend:8000
     depends_on:
       backend:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 15s
       timeout: 5s
       retries: 5

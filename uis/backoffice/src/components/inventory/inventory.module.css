@@ -29,6 +29,42 @@
   color: inherit;
 }
 
+.nav .navInbound {
+  border-color: rgba(22, 101, 52, 0.62);
+  background: rgba(22, 101, 52, 0.14);
+}
+
+.nav .navInbound:hover {
+  background: rgba(22, 101, 52, 0.24);
+}
+
+.nav .navOutbound {
+  border-color: rgba(154, 47, 47, 0.62);
+  background: rgba(154, 47, 47, 0.14);
+}
+
+.nav .navOutbound:hover {
+  background: rgba(154, 47, 47, 0.24);
+}
+
+.actionInbound {
+  border-color: rgba(22, 101, 52, 0.62);
+  background: rgba(22, 101, 52, 0.14);
+}
+
+.actionInbound:hover {
+  background: rgba(22, 101, 52, 0.24);
+}
+
+.actionOutbound {
+  border-color: rgba(154, 47, 47, 0.62);
+  background: rgba(154, 47, 47, 0.14);
+}
+
+.actionOutbound:hover {
+  background: rgba(154, 47, 47, 0.24);
+}
+
 .tableWrap {
   overflow-x: auto;
   border: 1px solid #e2e8f0;

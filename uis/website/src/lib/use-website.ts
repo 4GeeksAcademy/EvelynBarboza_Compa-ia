@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 
 export type Language = "es" | "en";
 
+const THEME_STORAGE_KEY = "trackflow-theme";
+
 export function useWebsite(copy: Record<Language, { title: string }>) {
   const [language, setLanguage] = useState<Language>("es");
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setThemeState] = useState<"light" | "dark">("light");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -24,6 +26,16 @@ export function useWebsite(copy: Record<Language, { title: string }>) {
       console.warn("No se pudo acceder a la preferencia de idioma.", error);
       if (initial === "es" || initial === "en") setLanguage(initial);
     }
+
+    try {
+      const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+      if (savedTheme === "light" || savedTheme === "dark") {
+        setThemeState(savedTheme);
+        document.documentElement.dataset.theme = savedTheme;
+      }
+    } catch (error) {
+      console.warn("No se pudo acceder a la preferencia de tema.", error);
+    }
   }, []);
 
   useEffect(() => {
@@ -38,9 +50,15 @@ export function useWebsite(copy: Record<Language, { title: string }>) {
     }
   }, [copy, language]);
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  function changeTheme(next: "light" | "dark") {
+    setThemeState(next);
+    document.documentElement.dataset.theme = next;
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch (error) {
+      console.warn("No se pudo guardar la preferencia de tema.", error);
+    }
+  }
 
   function changeLanguage(next: Language) {
     setLanguage(next);
@@ -51,5 +69,5 @@ export function useWebsite(copy: Record<Language, { title: string }>) {
     }
   }
 
-  return { language, changeLanguage, theme, setTheme, menuOpen, setMenuOpen };
+  return { language, changeLanguage, theme, setTheme: changeTheme, menuOpen, setMenuOpen };
 }

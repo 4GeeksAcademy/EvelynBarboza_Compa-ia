@@ -9,10 +9,10 @@ Cada subcarpeta dentro de `uis/` debe corresponder a **una interfaz de usuario c
 
 ## Ensamblaje actual
 
-- **Web pública:** [index.html](../index.html) y [application.html](../application.html),
-  servidos por Nginx con la configuración de [public](./public). El formulario
-  comercial es público y conserva su endpoint en la API. Se abre en el puerto 3000,
-  sin enlaces ni proxy al backoffice. La migración pública a React/Next está pendiente.
+- **Web pública:** [website](./website), aplicación Next.js independiente basada
+  en `index.html` y `application.html`. Mantiene las rutas del formulario comercial
+  y consume su endpoint a través de la API. Se abre en el puerto 3000 y no enlaza
+  al backoffice.
 - **Backoffice:** [backoffice](./backoffice/README.md), única aplicación Next.js
   activa, con proveedores, inventario, incidencias y alta de empleados para admins.
   Se abre por separado en `http://localhost:3001/backoffice/login`; al salir vuelve

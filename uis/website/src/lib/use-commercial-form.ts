@@ -13,14 +13,14 @@ const messages: Record<Language, Record<Message, string>> = {
     fullNameInvalid: "Escribe nombre y apellido con al menos 5 caracteres, usando letras, espacios, apostrofes o guiones.",
     emailInvalid: "Introduce un email de contacto valido.",
     formError: "Revisa los campos indicados antes de enviar.",
-    formSuccess: "Consulta recibida. El equipo comercial podra contactarte. No se ha creado una cuenta de empleado.",
+    formSuccess: "Consulta enviada correctamente. El equipo comercial podra contactarte.",
     serverError: "No se pudo enviar la consulta. Intentalo de nuevo.",
   },
   en: {
     fullNameInvalid: "Enter a full name of at least 5 characters using letters, spaces, apostrophes, or hyphens.",
     emailInvalid: "Enter a valid contact email.",
     formError: "Review the highlighted fields before submitting.",
-    formSuccess: "Inquiry received. Our business team can contact you. No employee account was created.",
+    formSuccess: "Inquiry sent successfully. Our business team will contact you.",
     serverError: "Could not send your inquiry. Please try again.",
   },
 };

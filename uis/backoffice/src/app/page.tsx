@@ -26,24 +26,26 @@ export default function Home() {
         </p>
 
 
-        <Link
-          href="/incidents"
-          className="button"
-        >
-          Analizar incidencias
-        </Link>
-        <Link
-          href="/suppliers"
-          className="button"
-        >
-          Gestionar proveedores
-        </Link>
-        <Link
-          href="/inventory/products"
-          className="button"
-        >
-          Gestionar inventario
-        </Link>
+        <div className="heroActions">
+          <Link
+            href="/incidents"
+            className="button"
+          >
+            Analizar incidencias
+          </Link>
+          <Link
+            href="/suppliers"
+            className="button"
+          >
+            Gestionar proveedores
+          </Link>
+          <Link
+            href="/inventory/products"
+            className="button"
+          >
+            Gestionar inventario
+          </Link>
+        </div>
 
       </section>
 

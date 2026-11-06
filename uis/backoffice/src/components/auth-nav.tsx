@@ -22,6 +22,11 @@ function getServerToken(): null {
   return null;
 }
 
+function isActiveRoute(pathname: string, href: string, includeChildren = false) {
+  const currentPath = pathname.replace(/^\/backoffice(?=\/|$)/, "") || "/";
+  return currentPath === href || (includeChildren && currentPath.startsWith(`${href}/`));
+}
+
 export default function AuthNav() {
   const pathname = usePathname();
   const token = useSyncExternalStore(subscribeToSession, getToken, getServerToken);
@@ -75,40 +80,80 @@ export default function AuthNav() {
 
   return (
     <div className="navLinks">
-      <Link href="/">
+      <Link
+        href="/"
+        className={isActiveRoute(pathname, "/") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/") ? "page" : undefined}
+      >
         Inicio
       </Link>
 
-      <Link href="/incidents">
+      <Link
+        href="/incidents"
+        className={isActiveRoute(pathname, "/incidents") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/incidents") ? "page" : undefined}
+      >
         Incidencias
       </Link>
 
-      <Link href="/suppliers">
+      <Link
+        href="/suppliers"
+        className={isActiveRoute(pathname, "/suppliers", true) ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/suppliers", true) ? "page" : undefined}
+      >
         Proveedores
       </Link>
 
-      <Link href="/inventory/products">
+      <Link
+        href="/inventory/products"
+        className={isActiveRoute(pathname, "/inventory", true) ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/inventory", true) ? "page" : undefined}
+      >
         Inventario
       </Link>
 
-      <Link href="/incidents/dashboard">
+      <Link
+        href="/incidents/dashboard"
+        className={isActiveRoute(pathname, "/incidents/dashboard") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/incidents/dashboard") ? "page" : undefined}
+      >
         Panel de incidencias
       </Link>
 
-      <Link href="/incidents/new">
+      <Link
+        href="/incidents/new"
+        className={isActiveRoute(pathname, "/incidents/new") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/incidents/new") ? "page" : undefined}
+      >
         Registrar incidencia
       </Link>
 
-      <Link href="/account/profile">
+      <Link
+        href="/account/profile"
+        className={isActiveRoute(pathname, "/account/profile") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/account/profile") ? "page" : undefined}
+      >
         Mi perfil
       </Link>
 
-      {isAdmin && <Link href="/employees">Alta de empleados</Link>}
+      {isAdmin && (
+        <Link
+          href="/employees"
+          className={isActiveRoute(pathname, "/employees") ? "navLinkActive" : undefined}
+          aria-current={isActiveRoute(pathname, "/employees") ? "page" : undefined}
+        >
+          Alta de empleados
+        </Link>
+      )}
       {error && <span role="alert">{error}</span>}
 
       <ThemeToggleButton />
 
-      <Link href="/account/change-password">
+      <Link
+        href="/account/change-password"
+        className={isActiveRoute(pathname, "/account/change-password") ? "navLinkActive" : undefined}
+        aria-current={isActiveRoute(pathname, "/account/change-password") ? "page" : undefined}
+      >
         Cambiar contraseña
       </Link>
 

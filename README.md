@@ -19,13 +19,17 @@ This repository is the **starter template** for transversal projects. You will w
 
 ---
 
-## Current status of the template
+## Current status
 
-The repository currently provides a **base folder structure and documentation skeleton**. It does not include runnable apps or global scripts yet.
+The monorepo runs two independent Next.js frontends, `uis/website` and
+`uis/backoffice`, with a unified FastAPI backend. Pipeline integration remains
+out of scope.
 
-- `CONTEXT.md` is a placeholder and must be replaced with your assigned company context.
-- There is no root `AGENTS.md` yet.
-- Shared package metadata exists in `packages/shared/package.json` (`@repo/shared-types`), but no workspace runner is configured at root.
+Run the services with `docker compose up --build`. The public website is at
+`http://localhost:3000/`; the employee backoffice is at
+`http://localhost:3001/backoffice/login`. The two frontends do not link to one
+another. The public commercial form reaches the backend endpoint; it does not
+create employee accounts.
 
 ---
 
