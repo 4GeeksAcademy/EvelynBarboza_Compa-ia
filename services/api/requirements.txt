@@ -7,4 +7,4 @@ python-dotenv
 python-jose[cryptography]
 libpass[bcrypt]>=1.9.3
 sqlmodel
-psycopg2-binary
+psycopg[binary]
